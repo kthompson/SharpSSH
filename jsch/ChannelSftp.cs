@@ -43,7 +43,7 @@ namespace Tamir.SharpSsh.jsch
 	public class ChannelSftp : ChannelSession
 	{
 		private static  byte SSH_FXP_INIT=               1;
-		private static  byte SSH_FXP_VERSION=            2;
+		//private static  byte SSH_FXP_VERSION=            2;
 		private static  byte SSH_FXP_OPEN=               3;
 		private static  byte SSH_FXP_CLOSE=              4;
 		private static  byte SSH_FXP_READ=               5;
@@ -51,7 +51,7 @@ namespace Tamir.SharpSsh.jsch
 		private static  byte SSH_FXP_LSTAT=              7;
 		private static  byte SSH_FXP_FSTAT=              8;
 		private static  byte SSH_FXP_SETSTAT=            9;
-		private static  byte SSH_FXP_FSETSTAT=          10;
+		//private static  byte SSH_FXP_FSETSTAT=          10;
 		private static  byte SSH_FXP_OPENDIR=           11;
 		private static  byte SSH_FXP_READDIR=           12;
 		private static  byte SSH_FXP_REMOVE=            13;
@@ -67,22 +67,22 @@ namespace Tamir.SharpSsh.jsch
 		private static  byte SSH_FXP_DATA=             103;
 		private static  byte SSH_FXP_NAME=             104;
 		private static  byte SSH_FXP_ATTRS=            105;
-		private static  byte SSH_FXP_EXTENDED=         (byte)200;
-		private static  byte SSH_FXP_EXTENDED_REPLY=   (byte)201;
+		//private static  byte SSH_FXP_EXTENDED=         (byte)200;
+		//private static  byte SSH_FXP_EXTENDED_REPLY=   (byte)201;
 
 		// pflags
 		private static  int SSH_FXF_READ=           0x00000001;
 		private static  int SSH_FXF_WRITE=          0x00000002;
-		private static  int SSH_FXF_APPEND=         0x00000004;
+		//private static  int SSH_FXF_APPEND=         0x00000004;
 		private static  int SSH_FXF_CREAT=          0x00000008;
 		private static  int SSH_FXF_TRUNC=          0x00000010;
-		private static  int SSH_FXF_EXCL=           0x00000020;
+		//private static  int SSH_FXF_EXCL=           0x00000020;
 
-		private static  int SSH_FILEXFER_ATTR_SIZE=         0x00000001;
-		private static  int SSH_FILEXFER_ATTR_UIDGID=       0x00000002;
-		private static  int SSH_FILEXFER_ATTR_PERMISSIONS=  0x00000004;
-		private static  int SSH_FILEXFER_ATTR_ACMODTIME=    0x00000008;
-		private static  uint SSH_FILEXFER_ATTR_EXTENDED=     0x80000000;
+		//private static  int SSH_FILEXFER_ATTR_SIZE=         0x00000001;
+		//private static  int SSH_FILEXFER_ATTR_UIDGID=       0x00000002;
+		//private static  int SSH_FILEXFER_ATTR_PERMISSIONS=  0x00000004;
+		//private static  int SSH_FILEXFER_ATTR_ACMODTIME=    0x00000008;
+		//private static  uint SSH_FILEXFER_ATTR_EXTENDED=     0x80000000;
 
 		public static  int SSH_FX_OK=                            0;
 		public static  int SSH_FX_EOF=                           1;
@@ -136,7 +136,7 @@ namespace Tamir.SharpSsh.jsch
 		public static  int APPEND=2;
 
 		//  private bool interactive=true;
-		private bool interactive=false;
+		//private bool interactive=false; unused
 		internal int seq=1;
 		private int[] ackid=new int[1];
 		private Buffer buf;
@@ -260,7 +260,7 @@ namespace Tamir.SharpSsh.jsch
 				{
 					path=(new File(path)).getCanonicalPath();
 				}
-				catch(Exception e){}
+				catch(Exception){}
 				lcwd=path;
 				return;
 			}
@@ -434,7 +434,7 @@ namespace Tamir.SharpSsh.jsch
 							SftpATTRS attr=_stat(_dst);
 							size_of_dst=attr.getSize();
 						}
-						catch(Exception eee)
+						catch(Exception)
 						{
 							//System.err.println(eee);
 						}
@@ -537,7 +537,7 @@ namespace Tamir.SharpSsh.jsch
 						SftpATTRS attr=_stat(dst);
 						skip=attr.getSize();
 					}
-					catch(Exception eee)
+					catch(Exception)
 					{
 						//System.err.println(eee);
 					}
@@ -754,7 +754,7 @@ namespace Tamir.SharpSsh.jsch
 						SftpATTRS attr=stat(dst);
 						skip=attr.getSize();
 					}
-					catch(Exception eee)
+					catch(Exception)
 					{
 						//System.out.println(eee);
 					}
@@ -1062,7 +1062,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 
 				int request_len=0;
-			loop:
+			//loop: unused label
 				while(true)
 				{
 
@@ -1387,7 +1387,7 @@ namespace Tamir.SharpSsh.jsch
 					int count=buf.getInt();
 
 					byte[] str;
-					int flags;
+					//int flags; unused variable
 
 					buf.reset();
 					while(count>0)
@@ -1649,7 +1649,7 @@ namespace Tamir.SharpSsh.jsch
 				SftpATTRS attr=SftpATTRS.getATTR(buf);
 				return attr.isDir();
 			}
-			catch(Exception e){}
+			catch(Exception){}
 			return false;
 		}
 		/*
@@ -2243,7 +2243,7 @@ namespace Tamir.SharpSsh.jsch
 				int count=buf.getInt();
 
 				byte[] str;
-				int flags;
+				//int flags; unused
 
 				buf.reset();
 				while(count>0)
@@ -2307,7 +2307,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 			}
 			return v;
@@ -2553,7 +2553,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 
 				try{sftp.sendREAD(handle, offset, len);}
-				catch(Exception e){ throw new System.IO.IOException("error"); }
+				catch(Exception e){ throw new System.IO.IOException("error",e); }
 
 				header= sftp.header(sftp.buf, header);
 				rest_length=header.length;
@@ -2644,7 +2644,7 @@ namespace Tamir.SharpSsh.jsch
 						*/
 				if(monitor!=null)monitor.end();
 				try{sftp._sendCLOSE(handle, header);}
-				catch(Exception e){throw new System.IO.IOException("error");}
+				catch(Exception e){throw new System.IO.IOException("error",e);}
 			}
 		}
 	}

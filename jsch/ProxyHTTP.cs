@@ -31,7 +31,7 @@ namespace Tamir.SharpSsh.jsch
 					host=proxy_host.substring(0, proxy_host.indexOf(':'));
 					port=Integer.parseInt(proxy_host.substring(proxy_host.indexOf(':')+1));
 				}
-				catch(Exception e)
+				catch(Exception)
 				{
 				}
 			}
@@ -108,7 +108,7 @@ namespace Tamir.SharpSsh.jsch
 					code=Integer.parseInt(response.substring(foo+1, bar));
 					reason=response.substring(bar+1);
 				}
-				catch(Exception e)
+				catch(Exception)
 				{
 				}
 				if(code!=200)
@@ -150,7 +150,7 @@ namespace Tamir.SharpSsh.jsch
 			catch(Exception e)
 			{
 				try{ if(socket!=null)socket.close(); }
-				catch(Exception eee)
+				catch(Exception)
 				{
 				}
 				String message="ProxyHTTP: "+e.toString();
@@ -168,7 +168,7 @@ namespace Tamir.SharpSsh.jsch
 				if(outs!=null)outs.close();
 				if(socket!=null)socket.close();
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 			}
 			ins=null;

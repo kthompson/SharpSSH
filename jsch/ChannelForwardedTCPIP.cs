@@ -120,7 +120,7 @@ namespace Tamir.SharpSsh.jsch
 					session.write(packet, this, i);
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.out.println(e);
 			}
@@ -274,7 +274,7 @@ namespace Tamir.SharpSsh.jsch
 				buf.putInt(rport);
 				session.write(packet);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//    throw new JSchException(e.toString());
 			}

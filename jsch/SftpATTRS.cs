@@ -51,14 +51,14 @@ namespace Tamir.SharpSsh.jsch
 
 		static  int S_ISUID = 04000; // set user ID on execution
 		static  int S_ISGID = 02000; // set group ID on execution
-		static  int S_ISVTX = 01000; // sticky bit   ****** NOT DOCUMENTED *****
+		//static  int S_ISVTX = 01000; // sticky bit   ****** NOT DOCUMENTED ***** //never used
 
 		static  int S_IRUSR = 00400; // read by owner
 		static  int S_IWUSR = 00200; // write by owner
 		static  int S_IXUSR = 00100; // execute/search by owner
-		static  int S_IREAD = 00400; // read by owner
-		static  int S_IWRITE= 00200; // write by owner
-		static  int S_IEXEC = 00100; // execute/search by owner
+		//static  int S_IREAD = 00400; // read by owner  //never used
+		//static  int S_IWRITE= 00200; // write by owner //unused
+		//static  int S_IEXEC = 00100; // execute/search by owner  //unused
 
 		static  int S_IRGRP = 00040; // read by group
 		static  int S_IWGRP = 00020; // write by group

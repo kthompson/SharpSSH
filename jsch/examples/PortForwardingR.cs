@@ -21,7 +21,7 @@ namespace Tamir.SharpSsh.jsch.examples
 	{
 		public static void Main(String[] arg)
 		{
-			int port;
+			//int port; //unused variable
 
 			try
 			{

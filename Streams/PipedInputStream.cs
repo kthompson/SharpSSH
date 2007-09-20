@@ -99,7 +99,6 @@ namespace Tamir.Streams
 		 */
 		public PipedInputStream() 
 		{
-			int i = 0;
 		}
 
 		/**

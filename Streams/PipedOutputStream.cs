@@ -91,8 +91,7 @@ namespace Tamir.Streams
 			sink = snk;
 			snk.m_in = -1;
 			snk.m_out = 0;
-			snk.connected = true;
-			int t=0;
+			snk.connected = true;			
 		}
 
 		/**

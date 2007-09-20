@@ -78,7 +78,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				addr=InetAddress.getByName(address);
 			}
-			catch(Exception uhe)
+			catch(Exception)
 			{
 				throw new JSchException("PortForwardingL: invalid address "+address+" specified.");
 			}
@@ -190,7 +190,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.out.println("! "+e);
 			}
@@ -206,7 +206,7 @@ namespace Tamir.SharpSsh.jsch
 				if(ss!=null)ss.close();
 				ss=null;
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 			}
 		}
