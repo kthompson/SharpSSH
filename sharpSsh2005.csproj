@@ -89,6 +89,9 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|.NET 1.1' ">
+    <DefineConstants>TRACE;DEBUG;TARGETTING_FX_1_1;NET_VER_1</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DiffieHellman">
       <Name>DiffieHellman</Name>
