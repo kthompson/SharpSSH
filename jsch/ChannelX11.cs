@@ -118,7 +118,11 @@ namespace Tamir.SharpSsh.jsch
 			type=Util.getBytes("x11");
 			try
 			{ 
+#if TARGETTING_FX_1_1
 				IPEndPoint ep = new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port);		
+#else
+                IPEndPoint ep = new IPEndPoint(Dns.GetHostEntry(host).AddressList[0], port);		
+#endif
 				socket=new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 				socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1);
 				socket.Connect(ep);

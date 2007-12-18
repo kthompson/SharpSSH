@@ -33,7 +33,11 @@ namespace Tamir.SharpSsh.java.net
 
 		public Socket(string host, int port)
 		{	
+#if TARGETTING_FX_1_1
 			IPEndPoint ep = new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port);
+#else
+            IPEndPoint ep = new IPEndPoint(Dns.GetHostEntry(host).AddressList[0], port);
+#endif
 			this.sock = new Sock(ep.AddressFamily,
 			SocketType.Stream, ProtocolType.Tcp);
 			this.sock.Connect(ep);
