@@ -204,6 +204,7 @@ namespace Tamir.SharpSsh
 				{
 					ToRecursive(server, dir, Path.GetFileName(dir));
 				}
+				SCP_EnterIntoParent(server);
 			}
 			else if(File.Exists(src))
 			{
@@ -514,6 +515,32 @@ namespace Tamir.SharpSsh
 								
 				string command="D0755 0 "+Path.GetFileName(dir)+"\n";
 				if(Verbos) Console.WriteLine("Enter directory: "+command);
+				
+				byte[] buff = Util.getBytes(command);
+				server.Write(buff, 0, buff.Length); server.Flush();
+
+				if(SCP_CheckAck(server)!=0)
+				{
+					throw new SshTransferException("Error openning communication channel.");				
+				}
+			}
+			catch{}
+		}
+
+		/// <summary>
+		/// Instructs the remote server to go up one level
+		/// </summary>
+		/// <param name="server">A connected server I/O stream</param>
+		protected void SCP_EnterIntoParent(Stream server)
+		{
+			try
+			{
+				byte[] tmp=new byte[1];
+
+				// send "C0644 filesize filename", where filename should not include '/'
+								
+				string command="E\n";
+				if(Verbos) Console.WriteLine(command);
 				
 				byte[] buff = Util.getBytes(command);
 				server.Write(buff, 0, buff.Length); server.Flush();
