@@ -1,4 +1,5 @@
 using System;
+using Tamir.SharpSsh.jsch;
 
 /* 
  * SshTransferProtocolBase.cs
@@ -46,6 +47,12 @@ namespace Tamir.SharpSsh
 			: base(host, user)
 		{
 		}
+
+		public SshTransferProtocolBase(Session session)
+			: base(session)
+		{
+		}
+
 		#region ITransferProtocol Members
 
 		public abstract void Get(string fromFilePath, string toFilePath);

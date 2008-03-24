@@ -60,6 +60,12 @@ namespace Tamir.SharpSsh
 			Init();
 		}
 
+		public SshShell(Session session)
+			: base(session)
+		{
+			Init();
+		}
+
 		protected void Init()
 		{
 			ExpectPattern = "";

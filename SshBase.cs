@@ -75,6 +75,12 @@ namespace Tamir.SharpSsh
 		{
 		}
 
+		public SshBase(Session session)
+			: this(session.host, session.username, session.password)
+		{
+			this.m_session = session;
+		}
+
 		/// <summary>
 		/// Adds identity file for publickey user authentication
 		/// </summary>
@@ -110,7 +116,9 @@ namespace Tamir.SharpSsh
 		/// <param name="tcpPort">The destination TCP port for this connection</param>
 		public virtual void Connect(int tcpPort)
 		{
-			this.ConnectSession(tcpPort);
+			if (m_session == null || !m_session.isConnected())
+				this.ConnectSession(tcpPort);
+
 			this.ConnectChannel();	
 		}
 
@@ -153,12 +161,21 @@ namespace Tamir.SharpSsh
 		/// </summary>
 		public virtual void Close()
 		{
+			this.Close(true);
+		}
+
+		/// <summary>
+		/// Closes the SSH subsystem
+		/// </summary>
+		/// <param name="closeSession">True if the session should be closed</param>
+		public virtual void Close(bool closeSession)
+		{
 			if (m_channel != null)
 			{
 				m_channel.disconnect();
 				m_channel = null;
 			}
-			if (m_session != null)
+			if (closeSession && m_session != null)
 			{
 				m_session.disconnect();
 				m_session = null;
@@ -251,6 +268,14 @@ namespace Tamir.SharpSsh
 				CheckConnected(); 
 				return m_session.getPort();
 			}
+		}
+
+		/// <summary>
+		/// Gets the underlying Session
+		/// </summary>
+		public Session Session
+		{
+			get { return m_session; }
 		}
 
 		/// <summary>

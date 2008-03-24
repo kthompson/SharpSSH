@@ -56,6 +56,11 @@ namespace Tamir.SharpSsh
 		{
 		}
 
+		public Scp(Session session)
+			: base(session)
+		{
+		}
+
 		protected override string ChannelType
 		{
 			get { return "exec"; }

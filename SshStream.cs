@@ -139,6 +139,15 @@ namespace Tamir.SharpSsh
 		/// </summary>
 		public override void Close()
 		{
+			this.Close(true);
+		}
+		
+		/// <summary>
+		/// Closes the current stream and releases any resources (such as sockets and file handles) associated with the current stream.
+		/// </summary>
+		/// <param name="closeSession">True will close the underlying session</param>
+		public virtual void Close(bool closeSession)
+		{
 			try
 			{
 				base.Close ();
@@ -146,7 +155,9 @@ namespace Tamir.SharpSsh
 				m_out.Close();
 				m_channel.close();
 				m_channel.disconnect();
-				m_session.disconnect();
+
+				if (closeSession)
+					m_session.disconnect();
 			}
 			catch{}
 		}
@@ -280,6 +291,14 @@ namespace Tamir.SharpSsh
 		public string ClientVersion
 		{
 			get{return m_session.getClientVersion();}
+		}
+
+		/// <summary>
+		/// Gets the underlying Session for the SshStream
+		/// </summary>
+		public Session Session
+		{
+			get { return m_session; }
 		}
 
 		/// <summary>
