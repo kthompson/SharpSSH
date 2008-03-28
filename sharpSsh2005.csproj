@@ -93,13 +93,9 @@
     <DefineConstants>TRACE;DEBUG;TARGETTING_FX_1_1;NET_VER_1</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DiffieHellman">
-      <Name>DiffieHellman</Name>
-      <HintPath>DiffieHellman.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security">
-      <Name>Org.Mentalis.Security</Name>
-      <HintPath>Org.Mentalis.Security.dll</HintPath>
+    <Reference Include="DiffieHellman, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DiffieHellman.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -119,9 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <Content Include="DiffieHellman.dll" />
-    <Content Include="jsch\examples\README.txt" />
-    <Content Include="Org.Mentalis.Security.dll" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -256,48 +249,6 @@
     </Compile>
     <Compile Include="jsch\DHGEX.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\AES.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\ChangePassphrase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\KeyGen.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\KnownHosts.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\PortForwardingL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\PortForwardingR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\ScpFrom.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\ScpTo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\Sftp.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\Shell.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\StreamForwarding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\UserAuthPubKey.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\util\ConsoleProgressBar.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jsch\examples\util\InputForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="jsch\ForwardedTCPIPDaemon.cs">
       <SubType>Code</SubType>
@@ -533,9 +484,12 @@
     <Compile Include="Streams\ProtectedConsoleStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="jsch\examples\util\InputForm.resx">
-      <DependentUpon>InputForm.cs</DependentUpon>
-    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Org.Mentalis.Security.Mini\Org.Mentalis.Security.Mini.csproj">
+      <Project>{E76971B7-4574-4ADC-9322-446119664673}</Project>
+      <Name>Org.Mentalis.Security.Mini</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\CrossCompile.CSharp.targets" />
   <PropertyGroup>
