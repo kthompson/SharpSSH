@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{D27CF69D-4681-492A-BE4D-D3D209104423}"
     >
@@ -624,85 +624,6 @@
                     RelPath = "jsch\Util.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\AES.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\ChangePassphrase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\KeyGen.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\KnownHosts.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\PortForwardingL.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\PortForwardingR.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\README.txt"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "jsch\examples\ScpFrom.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\ScpTo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\Sftp.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\Shell.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\StreamForwarding.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\UserAuthPubKey.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\util\ConsoleProgressBar.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\util\InputForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jsch\examples\util\InputForm.resx"
-                    DependentUpon = "InputForm.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "jsch\jce\AES128CBC.cs"
