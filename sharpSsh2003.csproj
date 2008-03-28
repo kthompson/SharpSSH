@@ -95,9 +95,9 @@
                     HintPath = "DiffieHellman.dll"
                 />
                 <Reference
-                    Name = "Org.Mentalis.Security"
-                    AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "Org.Mentalis.Security.dll"
+                    Name = "Org.Mentalis.Security.Mini2003"
+                    Project = "{E76971B7-4574-4ADC-9322-446119664673}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -120,10 +120,6 @@
                     RelPath = "ITransferProtocol.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Org.Mentalis.Security.dll"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Scp.cs"
