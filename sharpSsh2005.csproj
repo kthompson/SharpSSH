@@ -93,10 +93,6 @@
     <DefineConstants>TRACE;DEBUG;TARGETTING_FX_1_1;NET_VER_1</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DiffieHellman, Version=0.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\DiffieHellman.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -486,6 +482,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DiffieHellman\DiffieHellman2005.csproj">
+      <Project>{51A5DB78-BDDF-466D-911D-FCD600413726}</Project>
+      <Name>DiffieHellman2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Org.Mentalis.Security.Mini\Org.Mentalis.Security.Mini.csproj">
       <Project>{E76971B7-4574-4ADC-9322-446119664673}</Project>
       <Name>Org.Mentalis.Security.Mini</Name>
