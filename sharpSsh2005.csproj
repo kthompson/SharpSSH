@@ -48,6 +48,10 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Tamir.sharpSsh</AssemblyName>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -71,6 +75,10 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Tamir.sharpSsh</AssemblyName>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release%281.1%29|AnyCPU' ">
     <OutputPath>bin\Release%281.1%29\</OutputPath>
@@ -81,6 +89,14 @@
     </DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Tamir.sharpSsh</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release%281.1%29|.NET 1.1' ">
     <OutputPath>bin\.NET 1.1\Release%281.1%29\</OutputPath>
@@ -88,9 +104,27 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Tamir.sharpSsh</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|.NET 1.1' ">
     <DefineConstants>TRACE;DEBUG;TARGETTING_FX_1_1;NET_VER_1</DefineConstants>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Tamir.sharpSsh</AssemblyName>
+    <OutputPath>.\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -497,5 +531,7 @@
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
+    <ProjectGuid>{D27CF69D-4681-492A-BE4D-D3D209104423}</ProjectGuid>
+    <RootNamespace>Tamir.SharpSsh</RootNamespace>
   </PropertyGroup>
 </Project>
