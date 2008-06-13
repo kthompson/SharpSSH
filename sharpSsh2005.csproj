@@ -103,7 +103,6 @@
     <DefineConstants>TRACE;TARGETTING_FX_1_1;NET_1X</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputType>Library</OutputType>
     <AssemblyName>Tamir.sharpSsh</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +124,121 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>App.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 1.1' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 1.1\Debug%281.1%29\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TARGETTING_FX_1_1;NET_VER_1;NET_1_1</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 1.0' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 1.0\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_1_0</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 2.0' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 2.0\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_2_0</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET CF 1.0 %28Pocket PC 2003%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET CF 1.0 %28Pocket PC 2003%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_CF_1_0;PocketPC;NET_CF</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET CF 1.0 %28Smartphone 2003%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET CF 1.0 %28Smartphone 2003%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_CF_1_0;Smartphone;NET_CF</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET CF 2.0 %28Pocket PC 2003%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET CF 2.0 %28Pocket PC 2003%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_CF_2_0;PocketPC;NET_CF</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET CF 2.0 %28Windows CE 5.0%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET CF 2.0 %28Windows CE 5.0%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_CF_2_0;WindowsCE;NET_CF</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 1.1 %28Mono Compiler &amp; Libraries%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 1.1 %28Mono Compiler &amp; Libraries%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_1_1;Mono</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 1.1 %28Mono Libraries%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 1.1 %28Mono Libraries%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_1_1;Mono</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 2.0 %28Mono Compiler &amp; Libraries%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 2.0 %28Mono Compiler &amp; Libraries%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_2_0;Mono</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|.NET 2.0 %28Mono Libraries%29' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\.NET 2.0 %28Mono Libraries%29\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_2_0;Mono</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|Build All Platforms Simultaneously' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Build All Platforms Simultaneously\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug%281.1%29|Build All 2.0 Platforms Simultaneously' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Build All 2.0 Platforms Simultaneously\Debug%281.1%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -525,7 +639,7 @@
       <Name>Org.Mentalis.Security.Mini</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\CrossCompile.CSharp.targets" />
+  <Import Project="..\..\Resources\Ovatsus.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>

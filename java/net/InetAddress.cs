@@ -55,7 +55,7 @@ namespace Tamir.SharpSsh.java.net
 
 		public static InetAddress getByName(string name)
         {
-#if TARGETTING_FX_1_1
+#if NET_1_1
 			return new InetAddress( Dns.GetHostByName(name).AddressList[0] );
 #else
             return new InetAddress(Dns.GetHostEntry(name).AddressList[0]);
