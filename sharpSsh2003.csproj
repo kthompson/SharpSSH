@@ -90,13 +90,13 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "DiffieHellman"
-                    AssemblyName = "DiffieHellman"
-                    HintPath = "DiffieHellman.dll"
-                />
-                <Reference
                     Name = "Org.Mentalis.Security.Mini2003"
                     Project = "{E76971B7-4574-4ADC-9322-446119664673}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "DiffieHellman2003"
+                    Project = "{51A5DB78-BDDF-466D-911D-FCD600413726}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
@@ -111,10 +111,6 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DiffieHellman.dll"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "ITransferProtocol.cs"
