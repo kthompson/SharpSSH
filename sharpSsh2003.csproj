@@ -128,6 +128,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SharpSsh.snk"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "SshBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
