@@ -54,4 +54,4 @@ using System.Runtime.CompilerServices;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("..\\..\\SharpSsh.snk")]
+//[assembly: AssemblyKeyFile("..\\..\\SharpSsh.snk")]
