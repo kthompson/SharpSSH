@@ -94,7 +94,7 @@
     <DebugSymbols>true</DebugSymbols>
     <RootNamespace>Tamir.SharpSsh</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
@@ -108,7 +108,7 @@
     <DebugSymbols>true</DebugSymbols>
     <RootNamespace>Tamir.SharpSsh</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
@@ -121,7 +121,7 @@
     <RootNamespace>Tamir.SharpSsh</RootNamespace>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
@@ -139,7 +139,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\.NET 1.1\Debug%281.1%29\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET_1_1</DefineConstants>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <Optimize>true</Optimize>
     <DebugType>full</DebugType>
   </PropertyGroup>
