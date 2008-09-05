@@ -37,7 +37,7 @@ namespace Tamir.SharpSsh
 	/// <summary>
 	/// A wrapper class for JSch's SSH channel
 	/// </summary>
-	public abstract class SshBase
+	public abstract class SshBase : IDisposable
 	{
 		protected string    m_host;
 		protected string	m_user;
@@ -164,11 +164,11 @@ namespace Tamir.SharpSsh
 			this.Close(true);
 		}
 
-		/// <summary>
-		/// Closes the SSH subsystem
-		/// </summary>
-		/// <param name="closeSession">True if the session should be closed</param>
-		public virtual void Close(bool closeSession)
+        /// <summary>
+        /// Closes the SSH subsystem
+        /// </summary>
+        /// <param name="closeSession">True if the session should be closed</param>
+        public virtual void Close(bool closeSession)
 		{
 			if (m_channel != null)
 			{
@@ -363,5 +363,14 @@ namespace Tamir.SharpSsh
  
 			#endregion
 		}
-	}
+
+        #region IDisposable Members
+
+        public virtual void Dispose()
+        {
+            this.Close();
+        }
+
+        #endregion
+    }
 }
