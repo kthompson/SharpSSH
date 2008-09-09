@@ -76,7 +76,7 @@ namespace Tamir.SharpSsh.jsch
 			try
 			{
 				RequestWindowChange request=new RequestWindowChange();
-				request.setSize(col, row, wp, hp);
+				request.setSize(row, col, wp, hp);
 				request.request(session, this);
 			}
 			catch(Exception e)

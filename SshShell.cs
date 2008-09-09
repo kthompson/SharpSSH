@@ -72,6 +72,12 @@ namespace Tamir.SharpSsh
 			m_removeTerminalChars = false;			
 		}
 
+        protected override void OnConnected()
+        {
+            base.OnConnected();
+            (m_channel as ChannelShell).setPtySize(800, 800, 1024, 768);
+        }
+
 		protected override void OnChannelReceived()
 		{
 			base.OnChannelReceived ();
