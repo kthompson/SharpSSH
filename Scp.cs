@@ -483,7 +483,7 @@ namespace Tamir.SharpSsh
 			int copied = 0;
 			SendStartMessage(rfile, lfile, size, "Connected, starting transfer.");
 			// read a content of lfile
-			FileStream fos=File.OpenWrite(lfile);
+			FileStream fos=File.Create(lfile);
 			int foo;
 			int filesize=size;
 			byte[] buf = new byte[1024];
@@ -493,10 +493,10 @@ namespace Tamir.SharpSsh
 				else foo=filesize;
 				int len=server.Read(buf, 0, foo);
 				copied += len;
-				fos.Write(buf, 0, foo);
+                fos.Write(buf, 0, len);
 				SendProgressMessage(rfile, lfile, copied, size, "Transferring...");
-				filesize-=foo;
-				if(filesize==0) break;
+                filesize -= len;
+				if(filesize<=0 || len == 0) break;
 			}
 			fos.Close();
 			if(m_cancelled)
