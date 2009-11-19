@@ -483,9 +483,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiffieHellman\DiffieHellman2005.csproj">
+    <ProjectReference Include="..\DiffieHellman\DiffieHellman.csproj">
       <Project>{51A5DB78-BDDF-466D-911D-FCD600413726}</Project>
-      <Name>DiffieHellman2005</Name>
+      <Name>DiffieHellman</Name>
     </ProjectReference>
     <ProjectReference Include="..\Org.Mentalis.Security.Mini\Org.Mentalis.Security.Mini.csproj">
       <Project>{E76971B7-4574-4ADC-9322-446119664673}</Project>
