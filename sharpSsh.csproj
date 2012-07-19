@@ -150,10 +150,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DHKeyGeneration.cs" />
+    <Compile Include="DHParameters.cs" />
+    <Compile Include="DiffieHellman.cs" />
+    <Compile Include="DiffieHellmanManaged.cs" />
+    <Compile Include="TestApp.cs" />
     <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="mono\BigInteger.cs" />
+    <Compile Include="mono\ConfidenceFactor.cs" />
+    <Compile Include="mono\MiniParser.cs" />
+    <Compile Include="mono\NextPrimeFinder.cs" />
+    <Compile Include="mono\PrimalityTests.cs" />
+    <Compile Include="mono\PrimeGeneratorBase.cs" />
+    <Compile Include="mono\SecurityParser.cs" />
+    <Compile Include="mono\SequentialSearchPrimeGeneratorBase.cs" />
+    <Compile Include="Org.Mentalis.Security.Cryptography\HMAC.cs" />
     <Compile Include="ITransferProtocol.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -520,16 +534,6 @@
     <Compile Include="Streams\ProtectedConsoleStream.cs">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DiffieHellman\DiffieHellman.csproj">
-      <Project>{51A5DB78-BDDF-466D-911D-FCD600413726}</Project>
-      <Name>DiffieHellman</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Org.Mentalis.Security.Mini\Org.Mentalis.Security.Mini.csproj">
-      <Project>{E76971B7-4574-4ADC-9322-446119664673}</Project>
-      <Name>Org.Mentalis.Security.Mini</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpSsh.snk" />
