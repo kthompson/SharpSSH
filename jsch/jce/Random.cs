@@ -1,9 +1,10 @@
 using System;
+using System.Security.Cryptography;
 
 namespace Tamir.SharpSsh.jsch.jce
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,45 +32,54 @@ namespace Tamir.SharpSsh.jsch.jce
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class Random : Tamir.SharpSsh.jsch.Random
-	{
-		private byte[] tmp=new byte[16];
-		//private SecureRandom random;
-		private System.Security.Cryptography.RNGCryptoServiceProvider rand;
-		public Random()
-		{
-			//    random=null;
-			//	  random = new SecureRandom();
-			//	  
-			//    try{ random=SecureRandom.getInstance("SHA1PRNG"); }
-			//    catch(java.security.NoSuchAlgorithmException e){ 
-			//      // System.out.println(e); 
-			//
-			//      // The following code is for IBM's JCE
-			//      try{ random=SecureRandom.getInstance("IBMSecureRandom"); }
-			//      catch(java.security.NoSuchAlgorithmException ee){ 
-			//	System.out.println(ee); 
-			//      }
-			//    }
-			rand = new System.Security.Cryptography.RNGCryptoServiceProvider();
-		}
-		static int times = 0;
-		public void fill(byte[] foo, int start, int len)
-		{
-			try
-			{
-				if(len>tmp.Length){ tmp=new byte[len]; }
-				//random.nextBytes(tmp);
-				rand.GetBytes(tmp);
-				Array.Copy(tmp, 0, foo, start, len);
-			}
-			catch(Exception)
-			{
-				times++;
-				Console.WriteLine(times+") Array.Copy(tmp={0}, 0, foo={1}, {2}, {3}", tmp.Length, foo.Length, start, len);
-				//Console.WriteLine(e.StackTrace);
-			}
-		}
-	}
+    public class Random : jsch.Random
+    {
+        //private SecureRandom random;
+        private static int times;
+        private readonly RNGCryptoServiceProvider rand;
+        private byte[] tmp = new byte[16];
 
+        public Random()
+        {
+            //    random=null;
+            //	  random = new SecureRandom();
+            //	  
+            //    try{ random=SecureRandom.getInstance("SHA1PRNG"); }
+            //    catch(java.security.NoSuchAlgorithmException e){ 
+            //      // System.out.println(e); 
+            //
+            //      // The following code is for IBM's JCE
+            //      try{ random=SecureRandom.getInstance("IBMSecureRandom"); }
+            //      catch(java.security.NoSuchAlgorithmException ee){ 
+            //	System.out.println(ee); 
+            //      }
+            //    }
+            rand = new RNGCryptoServiceProvider();
+        }
+
+        #region Random Members
+
+        public void fill(byte[] foo, int start, int len)
+        {
+            try
+            {
+                if (len > tmp.Length)
+                {
+                    tmp = new byte[len];
+                }
+                //random.nextBytes(tmp);
+                rand.GetBytes(tmp);
+                Array.Copy(tmp, 0, foo, start, len);
+            }
+            catch (Exception)
+            {
+                times++;
+                Console.WriteLine(times + ") Array.Copy(tmp={0}, 0, foo={1}, {2}, {3}", tmp.Length, foo.Length, start,
+                                  len);
+                //Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        #endregion
+    }
 }

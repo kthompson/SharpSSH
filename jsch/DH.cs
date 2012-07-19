@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,13 +29,13 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public interface DH
-	{
-		void init();
-		void setP(byte[] p);
-		void setG(byte[] g);
-		byte[] getE();
-		void setF(byte[] f);
-		byte[] getK();
-	}
+    public interface DH
+    {
+        void init();
+        void setP(byte[] p);
+        void setG(byte[] g);
+        byte[] getE();
+        void setF(byte[] f);
+        byte[] getK();
+    }
 }

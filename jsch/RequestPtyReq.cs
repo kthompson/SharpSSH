@@ -2,8 +2,8 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,38 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	class RequestPtyReq : Request
-	{
-		void setCode(String cookie)
-		{
-		}
-		public void request(Session session, Channel channel)
-		{
-			Buffer buf=new Buffer();
-			Packet packet=new Packet(buf);
+    internal class RequestPtyReq : Request
+    {
+        #region Request Members
 
-			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(Util.getBytes("pty-req"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(Util.getBytes("vt100"));
-			buf.putInt(80);
-			buf.putInt(24);
-			buf.putInt(640);
-			buf.putInt(480);
-			buf.putString(Util.getBytes(""));
-			session.write(packet);
-		}
-		public bool waitForReply(){ return false; }
-	}
+        public void request(Session session, Channel channel)
+        {
+            var buf = new Buffer();
+            var packet = new Packet(buf);
 
+            packet.reset();
+            buf.putByte(Session.SSH_MSG_CHANNEL_REQUEST);
+            buf.putInt(channel.getRecipient());
+            buf.putString(Util.getBytes("pty-req"));
+            buf.putByte((byte) (waitForReply() ? 1 : 0));
+            buf.putString(Util.getBytes("vt100"));
+            buf.putInt(80);
+            buf.putInt(24);
+            buf.putInt(640);
+            buf.putInt(480);
+            buf.putString(Util.getBytes(""));
+            session.write(packet);
+        }
+
+        public bool waitForReply()
+        {
+            return false;
+        }
+
+        #endregion
+
+        private void setCode(String cookie)
+        {
+        }
+    }
 }

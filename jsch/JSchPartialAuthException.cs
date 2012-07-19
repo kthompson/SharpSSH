@@ -2,25 +2,26 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/// <summary>
-	/// Summary description for JSchException.
-	/// </summary>
-	public class JSchPartialAuthException : JSchException
-	{
-		string methods;
-		public JSchPartialAuthException() : base()
-		{
-			methods = null;
-		}
+    /// <summary>
+    /// Summary description for JSchException.
+    /// </summary>
+    public class JSchPartialAuthException : JSchException
+    {
+        private readonly string methods;
 
-		public JSchPartialAuthException(string msg) : base (msg)
-		{
-			methods = msg;
-		}
+        public JSchPartialAuthException()
+        {
+            methods = null;
+        }
 
-		public String getMethods()
-		{
-			return methods;
-		}
-	}
+        public JSchPartialAuthException(string msg) : base(msg)
+        {
+            methods = msg;
+        }
+
+        public String getMethods()
+        {
+            return methods;
+        }
+    }
 }

@@ -30,15 +30,16 @@ using System;
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  **/
+
 namespace Tamir.SharpSsh
 {
-	/// <summary>
-	/// Summary description for SshTransferException.
-	/// </summary>
-	public class SshTransferException : Exception
-	{
-		public SshTransferException(string msg):base(msg)
-		{
-		}
-	}
+    /// <summary>
+    /// Summary description for SshTransferException.
+    /// </summary>
+    public class SshTransferException : Exception
+    {
+        public SshTransferException(string msg) : base(msg)
+        {
+        }
+    }
 }

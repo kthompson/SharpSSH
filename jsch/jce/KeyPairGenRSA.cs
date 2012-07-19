@@ -1,9 +1,9 @@
-using System;
+using System.Security.Cryptography;
 
 namespace Tamir.SharpSsh.jsch.jce
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,63 +31,98 @@ namespace Tamir.SharpSsh.jsch.jce
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class KeyPairGenRSA : Tamir.SharpSsh.jsch.KeyPairGenRSA
-	{
-		byte[] d;  // private
-		byte[] e;  // public
-		byte[] n;
+    public class KeyPairGenRSA : jsch.KeyPairGenRSA
+    {
+        private RSAParameters RSAKeyInfo;
+        private byte[] c; //  coefficient
+        private byte[] d; // private
+        private byte[] e; // public
+        private byte[] ep; // exponent p
+        private byte[] eq; // exponent q
+        private byte[] n;
+        private byte[] p; // prime p
+        private byte[] q; // prime q
 
-		byte[] c; //  coefficient
-		byte[] ep; // exponent p
-		byte[] eq; // exponent q
-		byte[] p;  // prime p
-		byte[] q;  // prime q
+        public RSAParameters KeyInfo
+        {
+            get { return RSAKeyInfo; }
+        }
 
-		System.Security.Cryptography.RSAParameters RSAKeyInfo;
+        #region KeyPairGenRSA Members
 
-		public void init(int key_size)
-		{
-			//    KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-			//    keyGen.initialize(key_size, new SecureRandom());
-			//    KeyPair pair = keyGen.generateKeyPair();
-			//
-			//    PublicKey pubKey=pair.getPublic();
-			//    PrivateKey prvKey=pair.getPrivate();
+        public void init(int key_size)
+        {
+            //    KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            //    keyGen.initialize(key_size, new SecureRandom());
+            //    KeyPair pair = keyGen.generateKeyPair();
+            //
+            //    PublicKey pubKey=pair.getPublic();
+            //    PrivateKey prvKey=pair.getPrivate();
 
-			System.Security.Cryptography.RSACryptoServiceProvider rsa = new System.Security.Cryptography.RSACryptoServiceProvider(key_size);
-			RSAKeyInfo = rsa.ExportParameters(true);
+            var rsa = new RSACryptoServiceProvider(key_size);
+            RSAKeyInfo = rsa.ExportParameters(true);
 
-			//    d=((RSAPrivateKey)prvKey).getPrivateExponent().toByteArray();
-			//    e=((RSAPublicKey)pubKey).getPublicExponent().toByteArray();
-			//    n=((RSAKey)prvKey).getModulus().toByteArray();
-			//
-			//    c=((RSAPrivateCrtKey)prvKey).getCrtCoefficient().toByteArray();
-			//    ep=((RSAPrivateCrtKey)prvKey).getPrimeExponentP().toByteArray();
-			//    eq=((RSAPrivateCrtKey)prvKey).getPrimeExponentQ().toByteArray();
-			//    p=((RSAPrivateCrtKey)prvKey).getPrimeP().toByteArray();
-			//    q=((RSAPrivateCrtKey)prvKey).getPrimeQ().toByteArray();
+            //    d=((RSAPrivateKey)prvKey).getPrivateExponent().toByteArray();
+            //    e=((RSAPublicKey)pubKey).getPublicExponent().toByteArray();
+            //    n=((RSAKey)prvKey).getModulus().toByteArray();
+            //
+            //    c=((RSAPrivateCrtKey)prvKey).getCrtCoefficient().toByteArray();
+            //    ep=((RSAPrivateCrtKey)prvKey).getPrimeExponentP().toByteArray();
+            //    eq=((RSAPrivateCrtKey)prvKey).getPrimeExponentQ().toByteArray();
+            //    p=((RSAPrivateCrtKey)prvKey).getPrimeP().toByteArray();
+            //    q=((RSAPrivateCrtKey)prvKey).getPrimeQ().toByteArray();
 
-			d= RSAKeyInfo.D ;
-			e=RSAKeyInfo.Exponent ;
-			n=RSAKeyInfo.Modulus ;
+            d = RSAKeyInfo.D;
+            e = RSAKeyInfo.Exponent;
+            n = RSAKeyInfo.Modulus;
 
-			c=RSAKeyInfo.InverseQ ;
-			ep=RSAKeyInfo.DP ;
-			eq=RSAKeyInfo.DQ ;
-			p=RSAKeyInfo.P ;
-			q=RSAKeyInfo.Q ;
-		}
-		public byte[] getD(){return d;}
-		public byte[] getE(){return e;}
-		public byte[] getN(){return n;}
-		public byte[] getC(){return c;}
-		public byte[] getEP(){return ep;}
-		public byte[] getEQ(){return eq;}
-		public byte[] getP(){return p;}
-		public byte[] getQ(){return q;}
-		public System.Security.Cryptography.RSAParameters KeyInfo
-		{
-			get{return RSAKeyInfo;}
-		}
-	}
+            c = RSAKeyInfo.InverseQ;
+            ep = RSAKeyInfo.DP;
+            eq = RSAKeyInfo.DQ;
+            p = RSAKeyInfo.P;
+            q = RSAKeyInfo.Q;
+        }
+
+        public byte[] getD()
+        {
+            return d;
+        }
+
+        public byte[] getE()
+        {
+            return e;
+        }
+
+        public byte[] getN()
+        {
+            return n;
+        }
+
+        public byte[] getC()
+        {
+            return c;
+        }
+
+        public byte[] getEP()
+        {
+            return ep;
+        }
+
+        public byte[] getEQ()
+        {
+            return eq;
+        }
+
+        public byte[] getP()
+        {
+            return p;
+        }
+
+        public byte[] getQ()
+        {
+            return q;
+        }
+
+        #endregion
+    }
 }

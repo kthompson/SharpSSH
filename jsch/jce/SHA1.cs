@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace Tamir.SharpSsh.jsch.jce
 {
@@ -31,36 +33,46 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-public class SHA1 : Tamir.SharpSsh.jsch.HASH{
-  //MessageDigest md;
-	internal System.Security.Cryptography.SHA1CryptoServiceProvider md;
-	private System.Security.Cryptography.CryptoStream cs;
+    public class SHA1 : HASH
+    {
+        //MessageDigest md;
+        private CryptoStream cs;
+        internal SHA1CryptoServiceProvider md;
 
-  public override int getBlockSize(){return 20;}
-  public override void init(){
-    try
-	{ 
-		//md=MessageDigest.getInstance("SHA-1");
-		md=new System.Security.Cryptography.SHA1CryptoServiceProvider();
-		cs = new System.Security.Cryptography.CryptoStream( System.IO.Stream.Null, md, System.Security.Cryptography.CryptoStreamMode.Write);
-	}
-    catch(Exception e){
-      Console.WriteLine(e);
+        public override int getBlockSize()
+        {
+            return 20;
+        }
+
+        public override void init()
+        {
+            try
+            {
+                //md=MessageDigest.getInstance("SHA-1");
+                md = new SHA1CryptoServiceProvider();
+                cs = new CryptoStream(Stream.Null, md, CryptoStreamMode.Write);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public override void update(byte[] foo, int start, int len)
+        {
+            //md.update(foo, start, len);
+            cs.Write(foo, start, len);
+        }
+
+        public override byte[] digest()
+        {
+            //return md.digest();
+            cs.Close();
+            byte[] result = md.Hash;
+            md.Clear();
+            init(); //Reinitiazing hash objects
+
+            return result;
+        }
     }
-  }
-  public override void update(byte[] foo, int start, int len){
-    //md.update(foo, start, len);
-	  cs.Write(foo, start, len);
-  }
-  public override byte[] digest() {
-    //return md.digest();
-	  cs.Close();
-	  byte[] result = md.Hash; 
-	  md.Clear();
-	  init(); //Reinitiazing hash objects
-
-	  return result;
-  }
-}
-
 }

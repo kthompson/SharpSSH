@@ -1,15 +1,16 @@
 using System;
-using System.Net;
 using System.IO;
-using Tamir.Streams;
 using System.Runtime.CompilerServices;
+using Tamir.SharpSsh.java.io;
 using Tamir.SharpSsh.java.lang;
+using Tamir.SharpSsh.java.util;
+using Tamir.Streams;
 using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use In source and binary forms, with or without
@@ -38,321 +39,365 @@ namespace Tamir.SharpSsh.jsch
 	*/
 
 
-	public abstract class Channel : Tamir.SharpSsh.java.lang.Runnable
-	{
-		internal static int index=0; 
-		private static java.util.Vector pool=new java.util.Vector();
-		internal static Channel getChannel(String type)
-		{
-			if(type.Equals("session"))
-			{
-				return new ChannelSession();
-			}
-			if(type.Equals("shell"))
-			{
-				return new ChannelShell();
-			}
-			if(type.Equals("exec"))
-			{
-				return new ChannelExec();
-			}
-			if(type.Equals("x11"))
-			{
-				return new ChannelX11();
-			}
-			if(type.Equals("direct-tcpip"))
-			{
-				return new ChannelDirectTCPIP();
-			}
-			if(type.Equals("forwarded-tcpip"))
-			{
-				return new ChannelForwardedTCPIP();
-			}
-			if(type.Equals("sftp"))
-			{
-				return new ChannelSftp();
-			}
-			if(type.Equals("subsystem"))
-			{
-				return new ChannelSubsystem();
-			}
-			return null;
-		}
-		internal static Channel getChannel(int id, Session session)
-		{
-			lock(pool)
-			{
-				for(int i=0; i<pool.size(); i++)
-				{
-					Channel c=(Channel)(pool.elementAt(i));
-					if(c.id==id && c.session==session) return c;
-				}
-			}
-			return null;
-		}
-		internal static void del(Channel c)
-		{
-			lock(pool)
-			{
-				pool.removeElement(c);
-			}
-		}
+    public abstract class Channel : Runnable
+    {
+        internal static int index;
+        private static readonly Vector pool = new Vector();
 
-		internal int id;
-		internal int recipient=-1;
-		internal byte[] type=new Str("foo").getBytes();
-		internal int lwsize_max=0x100000;
-		internal int lwsize=0x100000;  // local initial window size
-		internal int lmpsize=0x4000;     // local maximum packet size
+        internal bool _close;
+        internal bool _eof_remote;
+        internal bool connected;
+        internal bool eof_local;
 
-		internal int rwsize=0;         // remote initial window size
-		internal int rmpsize=0;        // remote maximum packet size
+        internal int exitstatus = -1;
+        internal int id;
+        internal IO io;
+        internal int lmpsize = 0x4000; // local maximum packet size
+        internal int lwsize = 0x100000; // local initial window size
+        internal int lwsize_max = 0x100000;
+        internal int recipient = -1;
 
-		internal IO io=null;    
-		internal Thread thread=null;
+        internal int reply;
+        internal int rmpsize; // remote maximum packet size
+        internal int rwsize; // remote initial window size
 
-		internal bool eof_local=false;
-		internal bool _eof_remote=false;
+        internal Session session;
+        internal Thread thread;
+        internal byte[] type = new Str("foo").getBytes();
 
-		internal bool _close=false;
-		internal bool connected=false;
+        internal Channel()
+        {
+            lock (pool)
+            {
+                id = index++;
+                pool.addElement(this);
+            }
+        }
 
-		internal int exitstatus=-1;
+        #region Runnable Members
 
-		internal int reply=0; 
+        public virtual void run()
+        {
+        }
 
-		internal Session session;
+        #endregion
 
-		internal Channel()
-		{
-			lock(pool)
-			{
-				id=index++;
-				pool.addElement(this);
-			}
-		}
-		internal virtual void setRecipient(int foo)
-		{
-			this.recipient=foo;
-		}
-		internal virtual int getRecipient()
-		{
-			return recipient;
-		}
+        internal static Channel getChannel(String type)
+        {
+            if (type.Equals("session"))
+            {
+                return new ChannelSession();
+            }
+            if (type.Equals("shell"))
+            {
+                return new ChannelShell();
+            }
+            if (type.Equals("exec"))
+            {
+                return new ChannelExec();
+            }
+            if (type.Equals("x11"))
+            {
+                return new ChannelX11();
+            }
+            if (type.Equals("direct-tcpip"))
+            {
+                return new ChannelDirectTCPIP();
+            }
+            if (type.Equals("forwarded-tcpip"))
+            {
+                return new ChannelForwardedTCPIP();
+            }
+            if (type.Equals("sftp"))
+            {
+                return new ChannelSftp();
+            }
+            if (type.Equals("subsystem"))
+            {
+                return new ChannelSubsystem();
+            }
+            return null;
+        }
 
-		public virtual void init()
-		{
-		}
+        internal static Channel getChannel(int id, Session session)
+        {
+            lock (pool)
+            {
+                for (int i = 0; i < pool.size(); i++)
+                {
+                    var c = (Channel) (pool.elementAt(i));
+                    if (c.id == id && c.session == session) return c;
+                }
+            }
+            return null;
+        }
 
-		public virtual void connect()
-		{
-			if(!session.isConnected())
-			{
-				throw new JSchException("session is down");
-			}
-			try
-			{
-				Buffer buf=new Buffer(100);
-				Packet packet=new Packet(buf);
-				// send
-				// byte   SSH_MSG_CHANNEL_OPEN(90)
-				// string channel type         //
-				// uint32 sender channel       // 0
-				// uint32 initial window size  // 0x100000(65536)
-				// uint32 maxmum packet size   // 0x4000(16384)
-				packet.reset();
-				buf.putByte((byte)90);
-				buf.putString(this.type);
-				buf.putInt(this.id);
-				buf.putInt(this.lwsize);
-				buf.putInt(this.lmpsize);
-				session.write(packet);
+        internal static void del(Channel c)
+        {
+            lock (pool)
+            {
+                pool.removeElement(c);
+            }
+        }
 
-				int retry=1000;
-				while(this.getRecipient()==-1 &&
-					session.isConnected() &&
-					retry>0)
-				{
-					try{Thread.sleep(50);}
-					catch(Exception){}
-					retry--;
-				}
-				if(!session.isConnected())
-				{
-					throw new JSchException("session is down");
-				}
-				if(retry==0)
-				{
-					throw new JSchException("channel is not opened.");
-				}
-				connected=true;
-				start();
-			}
-			catch(Exception e)
-			{
-				connected=false;
-				if(e is JSchException) throw (JSchException)e;
-			}
-		}
+        internal virtual void setRecipient(int foo)
+        {
+            recipient = foo;
+        }
 
-		public virtual void setXForwarding(bool foo)
-		{
-		}
+        internal virtual int getRecipient()
+        {
+            return recipient;
+        }
 
-		public virtual void start(){}
+        public virtual void init()
+        {
+        }
 
-		public bool isEOF() {return _eof_remote;}
+        public virtual void connect()
+        {
+            if (!session.isConnected())
+            {
+                throw new JSchException("session is down");
+            }
+            try
+            {
+                var buf = new Buffer(100);
+                var packet = new Packet(buf);
+                // send
+                // byte   SSH_MSG_CHANNEL_OPEN(90)
+                // string channel type         //
+                // uint32 sender channel       // 0
+                // uint32 initial window size  // 0x100000(65536)
+                // uint32 maxmum packet size   // 0x4000(16384)
+                packet.reset();
+                buf.putByte(90);
+                buf.putString(type);
+                buf.putInt(id);
+                buf.putInt(lwsize);
+                buf.putInt(lmpsize);
+                session.write(packet);
 
-		internal virtual void getData(Buffer buf)
-		{
-			setRecipient(buf.getInt());
-			setRemoteWindowSize(buf.getInt());
-			setRemotePacketSize(buf.getInt());
-		}
+                int retry = 1000;
+                while (getRecipient() == -1 &&
+                       session.isConnected() &&
+                       retry > 0)
+                {
+                    try
+                    {
+                        Thread.sleep(50);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    retry--;
+                }
+                if (!session.isConnected())
+                {
+                    throw new JSchException("session is down");
+                }
+                if (retry == 0)
+                {
+                    throw new JSchException("channel is not opened.");
+                }
+                connected = true;
+                start();
+            }
+            catch (Exception e)
+            {
+                connected = false;
+                if (e is JSchException) throw e;
+            }
+        }
 
-		public virtual void setInputStream(Stream In)
-		{
-			io.setInputStream(In, false);
-		}
-		public virtual void setInputStream(Stream In, bool dontclose)
-		{
-			io.setInputStream(In, dontclose);
-		}
-		public virtual void setOutputStream(Stream Out)
-		{
-			io.setOutputStream(Out, false);
-		}
-		public virtual void setOutputStream(Stream Out, bool dontclose)
-		{
-			io.setOutputStream(Out, dontclose);
-		}
-		public virtual void setExtOutputStream(Stream Out)
-		{
-			io.setExtOutputStream(Out, false);
-		}
-		public virtual void setExtOutputStream(Stream Out, bool dontclose)
-		{
-			io.setExtOutputStream(Out, dontclose);
-		}
-		public virtual java.io.InputStream getInputStream()  
-		{
-			PipedInputStream In=
-				new MyPipedInputStream(
-				32*1024  // this value should be customizable.
-				);
-			io.setOutputStream(new PassiveOutputStream(In), false);
-			return In;
-		}
-		public virtual java.io.InputStream getExtInputStream()  
-		{
-			PipedInputStream In=
-				new MyPipedInputStream(
-				32*1024  // this value should be customizable.
-				);
-			io.setExtOutputStream(new PassiveOutputStream(In), false);
-			return In;
-		}
-		public virtual Stream getOutputStream()  
-		{
-			PipedOutputStream Out=new PipedOutputStream();
-			io.setInputStream(new PassiveInputStream(Out
-				, 32*1024
-				), false);
-			//  io.setInputStream(new PassiveInputStream(Out), false);
-			return Out;
-		}
-		internal class MyPipedInputStream : PipedInputStream
-		{
-			internal MyPipedInputStream():base() { ; }
-			internal MyPipedInputStream(int size) :base()
-			{
-				buffer=new byte[size];
-			}
-			internal MyPipedInputStream(PipedOutputStream Out):base(Out) { }
-			internal MyPipedInputStream(PipedOutputStream Out, int size):base(Out) 
-			{
-				buffer=new byte[size];
-			}
-		}
-		internal virtual void setLocalWindowSizeMax(int foo){ this.lwsize_max=foo; }
-		internal virtual void setLocalWindowSize(int foo){ this.lwsize=foo; }
-		internal virtual void setLocalPacketSize(int foo){ this.lmpsize=foo; }
-		[System.Runtime.CompilerServices.MethodImpl(MethodImplOptions.Synchronized)]
-		internal virtual void setRemoteWindowSize(int foo){ this.rwsize=foo; }
-		[System.Runtime.CompilerServices.MethodImpl(MethodImplOptions.Synchronized)]
-		internal virtual void addRemoteWindowSize(int foo){ this.rwsize+=foo; }
-		internal virtual void setRemotePacketSize(int foo){ this.rmpsize=foo; }
+        public virtual void setXForwarding(bool foo)
+        {
+        }
 
-		public virtual void run()
-		{
-		}
+        public virtual void start()
+        {
+        }
 
-		internal virtual void write(byte[] foo)  
-		{
-			write(foo, 0, foo.Length);
-		}
-		internal virtual void write(byte[] foo, int s, int l)  
-		{
-			try
-			{
-				//    if(io.outs!=null)
-				io.put(foo, s, l);
-			}
-			catch(NullReferenceException){}
-		}
-		internal virtual void write_ext(byte[] foo, int s, int l)  
-		{
-			try
-			{
-				//    if(io.out_ext!=null)
-				io.put_ext(foo, s, l);
-			}
-			catch(NullReferenceException){}
-		}
+        public bool isEOF()
+        {
+            return _eof_remote;
+        }
 
-		internal virtual void eof_remote()
-		{
-			_eof_remote=true;
-			try
-			{
-				if(io.outs!=null)
-				{
-					io.outs.Close();
-					io.outs=null;
-				}
-			}
-			catch(NullReferenceException){}
-			catch(IOException){}
-		}
+        internal virtual void getData(Buffer buf)
+        {
+            setRecipient(buf.getInt());
+            setRemoteWindowSize(buf.getInt());
+            setRemotePacketSize(buf.getInt());
+        }
 
-		internal virtual void eof()
-		{
-			//System.Out.println("EOF!!!! "+this);
-			//Thread.dumpStack();
-			if(_close)return;
-			if(eof_local)return;
-			eof_local=true;
-			//close=eof;
-			try
-			{
-				Buffer buf=new Buffer(100);
-				Packet packet=new Packet(buf);
-				packet.reset();
-				buf.putByte((byte)Session.SSH_MSG_CHANNEL_EOF);
-				buf.putInt(getRecipient());
-				session.write(packet);
-			}
-			catch(Exception)
-			{
-				//System.Out.println("Channel.eof");
-				//e.printStackTrace();
-			}
-			/*
+        public virtual void setInputStream(Stream In)
+        {
+            io.setInputStream(In, false);
+        }
+
+        public virtual void setInputStream(Stream In, bool dontclose)
+        {
+            io.setInputStream(In, dontclose);
+        }
+
+        public virtual void setOutputStream(Stream Out)
+        {
+            io.setOutputStream(Out, false);
+        }
+
+        public virtual void setOutputStream(Stream Out, bool dontclose)
+        {
+            io.setOutputStream(Out, dontclose);
+        }
+
+        public virtual void setExtOutputStream(Stream Out)
+        {
+            io.setExtOutputStream(Out, false);
+        }
+
+        public virtual void setExtOutputStream(Stream Out, bool dontclose)
+        {
+            io.setExtOutputStream(Out, dontclose);
+        }
+
+        public virtual InputStream getInputStream()
+        {
+            PipedInputStream In =
+                new MyPipedInputStream(
+                    32*1024 // this value should be customizable.
+                    );
+            io.setOutputStream(new PassiveOutputStream(In), false);
+            return In;
+        }
+
+        public virtual InputStream getExtInputStream()
+        {
+            PipedInputStream In =
+                new MyPipedInputStream(
+                    32*1024 // this value should be customizable.
+                    );
+            io.setExtOutputStream(new PassiveOutputStream(In), false);
+            return In;
+        }
+
+        public virtual Stream getOutputStream()
+        {
+            var Out = new PipedOutputStream();
+            io.setInputStream(new PassiveInputStream(Out
+                                                     , 32*1024
+                                  ), false);
+            //  io.setInputStream(new PassiveInputStream(Out), false);
+            return Out;
+        }
+
+        internal virtual void setLocalWindowSizeMax(int foo)
+        {
+            lwsize_max = foo;
+        }
+
+        internal virtual void setLocalWindowSize(int foo)
+        {
+            lwsize = foo;
+        }
+
+        internal virtual void setLocalPacketSize(int foo)
+        {
+            lmpsize = foo;
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        internal virtual void setRemoteWindowSize(int foo)
+        {
+            rwsize = foo;
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        internal virtual void addRemoteWindowSize(int foo)
+        {
+            rwsize += foo;
+        }
+
+        internal virtual void setRemotePacketSize(int foo)
+        {
+            rmpsize = foo;
+        }
+
+        internal virtual void write(byte[] foo)
+        {
+            write(foo, 0, foo.Length);
+        }
+
+        internal virtual void write(byte[] foo, int s, int l)
+        {
+            try
+            {
+                //    if(io.outs!=null)
+                io.put(foo, s, l);
+            }
+            catch (NullReferenceException)
+            {
+            }
+        }
+
+        internal virtual void write_ext(byte[] foo, int s, int l)
+        {
+            try
+            {
+                //    if(io.out_ext!=null)
+                io.put_ext(foo, s, l);
+            }
+            catch (NullReferenceException)
+            {
+            }
+        }
+
+        internal virtual void eof_remote()
+        {
+            _eof_remote = true;
+            try
+            {
+                if (io.outs != null)
+                {
+                    io.outs.Close();
+                    io.outs = null;
+                }
+            }
+            catch (NullReferenceException)
+            {
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        internal virtual void eof()
+        {
+            //System.Out.println("EOF!!!! "+this);
+            //Thread.dumpStack();
+            if (_close) return;
+            if (eof_local) return;
+            eof_local = true;
+            //close=eof;
+            try
+            {
+                var buf = new Buffer(100);
+                var packet = new Packet(buf);
+                packet.reset();
+                buf.putByte(Session.SSH_MSG_CHANNEL_EOF);
+                buf.putInt(getRecipient());
+                session.write(packet);
+            }
+            catch (Exception)
+            {
+                //System.Out.println("Channel.eof");
+                //e.printStackTrace();
+            }
+            /*
 			if(!isConnected()){ disconnect(); }
 			*/
-		}
+        }
 
-		/*
+        /*
 		http://www1.ietf.org/internet-drafts/draft-ietf-secsh-connect-24.txt
 
 	  5.3  Closing a Channel
@@ -388,58 +433,60 @@ namespace Tamir.SharpSsh.jsch
 		   to the actual destination, if possible.
 		*/
 
-		internal virtual void close()
-		{
-			//System.Out.println("close!!!!");
-			if(_close)return;
-			_close=true;
-			try
-			{
-				Buffer buf=new Buffer(100);
-				Packet packet=new Packet(buf);
-				packet.reset();
-				buf.putByte((byte)Session.SSH_MSG_CHANNEL_CLOSE);
-				buf.putInt(getRecipient());
-				session.write(packet);
-			}
-			catch(Exception)
-			{
-				//e.printStackTrace();
-			}
-		}
-		public virtual bool isClosed()
-		{
-			return _close;
-		}
-		internal static void disconnect(Session session)
-		{
-			Channel[] channels=null;
-			int count=0;
-			lock(pool)
-			{
-				channels=new Channel[pool.size()];
-				for(int i=0; i<pool.size(); i++)
-				{
-					try
-					{
-						Channel c=((Channel)(pool.elementAt(i)));
-						if(c.session==session)
-						{
-							channels[count++]=c;
-						}
-					}
-					catch(Exception)
-					{
-					}
-				} 
-			}
-			for(int i=0; i<count; i++)
-			{
-				channels[i].disconnect();
-			}
-		}
+        internal virtual void close()
+        {
+            //System.Out.println("close!!!!");
+            if (_close) return;
+            _close = true;
+            try
+            {
+                var buf = new Buffer(100);
+                var packet = new Packet(buf);
+                packet.reset();
+                buf.putByte(Session.SSH_MSG_CHANNEL_CLOSE);
+                buf.putInt(getRecipient());
+                session.write(packet);
+            }
+            catch (Exception)
+            {
+                //e.printStackTrace();
+            }
+        }
 
-		/*
+        public virtual bool isClosed()
+        {
+            return _close;
+        }
+
+        internal static void disconnect(Session session)
+        {
+            Channel[] channels = null;
+            int count = 0;
+            lock (pool)
+            {
+                channels = new Channel[pool.size()];
+                for (int i = 0; i < pool.size(); i++)
+                {
+                    try
+                    {
+                        var c = ((Channel) (pool.elementAt(i)));
+                        if (c.session == session)
+                        {
+                            channels[count++] = c;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            for (int i = 0; i < count; i++)
+            {
+                channels[i].disconnect();
+            }
+        }
+
+        /*
 		public void finalize() throws Throwable{
 		  disconnect();
 		  super.finalize();
@@ -447,57 +494,57 @@ namespace Tamir.SharpSsh.jsch
 		}
 		*/
 
-		public virtual void disconnect()
-		{
-			//System.Out.println(this+":disconnect "+io+" "+io.in);
-			if(!connected)
-			{
-				return;
-			}
-			connected=false;
+        public virtual void disconnect()
+        {
+            //System.Out.println(this+":disconnect "+io+" "+io.in);
+            if (!connected)
+            {
+                return;
+            }
+            connected = false;
 
-			close();
+            close();
 
-			_eof_remote=eof_local=true;
+            _eof_remote = eof_local = true;
 
-			thread=null;
+            thread = null;
 
-			try
-			{
-				if(io!=null)
-				{
-					io.close();
-				}
-			}
-			catch(Exception)
-			{
-				//e.printStackTrace();
-			}
-			io=null;
-			Channel.del(this);
-		}
+            try
+            {
+                if (io != null)
+                {
+                    io.close();
+                }
+            }
+            catch (Exception)
+            {
+                //e.printStackTrace();
+            }
+            io = null;
+            del(this);
+        }
 
-		public virtual bool isConnected()
-		{
-			if(this.session!=null)
-			{
-				return session.isConnected() && connected;
-			}
-			return false;
-		}
+        public virtual bool isConnected()
+        {
+            if (session != null)
+            {
+                return session.isConnected() && connected;
+            }
+            return false;
+        }
 
-		public virtual void sendSignal(String foo)  
-		{
-			RequestSignal request=new RequestSignal();
-			request.setSignal(foo);
-			request.request(session, this);
-		}
+        public virtual void sendSignal(String foo)
+        {
+            var request = new RequestSignal();
+            request.setSignal(foo);
+            request.request(session, this);
+        }
 
-		//  public String toString(){
-		//      return "Channel: type="+new String(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
-		//  }
+        //  public String toString(){
+        //      return "Channel: type="+new String(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
+        //  }
 
-		/*
+        /*
 		  class OutputThread extends Thread{
 			Channel c;
 			OutputThread(Channel c){ this.c=c;}
@@ -505,43 +552,96 @@ namespace Tamir.SharpSsh.jsch
 		  }
 		*/
 
-		internal class PassiveInputStream : MyPipedInputStream
-		{
-			internal PipedOutputStream Out;
-			internal PassiveInputStream(PipedOutputStream Out, int size) :base(Out, size)
-			{
-				this.Out=Out;
-			}
-			internal PassiveInputStream(PipedOutputStream Out):base(Out) 
-			{
-				this.Out=Out;
-			}
-			public override void close() 
-			{
-				if(Out!=null)
-				{
-					this.Out.close();
-				}
-				Out=null;
-			}
-		}
-		internal class PassiveOutputStream : PipedOutputStream
-		{
-			internal PassiveOutputStream(PipedInputStream In) :base(In)
-			{
-			}
-		}
+        internal virtual void setExitStatus(int foo)
+        {
+            exitstatus = foo;
+        }
 
-		internal virtual void setExitStatus(int foo){ exitstatus=foo; }
-		public virtual int getExitStatus(){ return exitstatus; }
+        public virtual int getExitStatus()
+        {
+            return exitstatus;
+        }
 
-		internal virtual void setSession(Session session)
-		{
-			this.session=session;
-		}
-		public virtual Session getSession(){ return session; }
-		public virtual int getId(){ return id; }
-		//public int getRecipientId(){ return getRecipient(); }
+        internal virtual void setSession(Session session)
+        {
+            this.session = session;
+        }
 
-	}
+        public virtual Session getSession()
+        {
+            return session;
+        }
+
+        public virtual int getId()
+        {
+            return id;
+        }
+
+        #region Nested type: MyPipedInputStream
+
+        internal class MyPipedInputStream : PipedInputStream
+        {
+            internal MyPipedInputStream()
+            {
+                ;
+            }
+
+            internal MyPipedInputStream(int size)
+            {
+                buffer = new byte[size];
+            }
+
+            internal MyPipedInputStream(PipedOutputStream Out) : base(Out)
+            {
+            }
+
+            internal MyPipedInputStream(PipedOutputStream Out, int size) : base(Out)
+            {
+                buffer = new byte[size];
+            }
+        }
+
+        #endregion
+
+        #region Nested type: PassiveInputStream
+
+        internal class PassiveInputStream : MyPipedInputStream
+        {
+            internal PipedOutputStream Out;
+
+            internal PassiveInputStream(PipedOutputStream Out, int size) : base(Out, size)
+            {
+                this.Out = Out;
+            }
+
+            internal PassiveInputStream(PipedOutputStream Out) : base(Out)
+            {
+                this.Out = Out;
+            }
+
+            public override void close()
+            {
+                if (Out != null)
+                {
+                    Out.close();
+                }
+                Out = null;
+            }
+        }
+
+        #endregion
+
+        #region Nested type: PassiveOutputStream
+
+        internal class PassiveOutputStream : PipedOutputStream
+        {
+            internal PassiveOutputStream(PipedInputStream In) : base(In)
+            {
+            }
+        }
+
+        #endregion
+
+        //public int getRecipientId(){ return getRecipient(); }
+    }
 }

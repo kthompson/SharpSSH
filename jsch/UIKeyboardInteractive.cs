@@ -2,8 +2,8 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,12 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public interface UIKeyboardInteractive
-	{
-		String[] promptKeyboardInteractive(String destination,
-			String name,
-			String instruction,
-			String[] prompt,
-			bool[] echo);
-	}
+    public interface UIKeyboardInteractive
+    {
+        String[] promptKeyboardInteractive(String destination,
+                                           String name,
+                                           String instruction,
+                                           String[] prompt,
+                                           bool[] echo);
+    }
 }

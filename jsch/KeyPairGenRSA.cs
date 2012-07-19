@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,18 +29,17 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public interface KeyPairGenRSA
-	{
-		void init(int key_size);
-		byte[] getD();
-		byte[] getE();
-		byte[] getN();
+    public interface KeyPairGenRSA
+    {
+        void init(int key_size);
+        byte[] getD();
+        byte[] getE();
+        byte[] getN();
 
-		byte[] getC();
-		byte[] getEP();
-		byte[] getEQ();
-		byte[] getP();
-		byte[] getQ();
-	}
-
+        byte[] getC();
+        byte[] getEP();
+        byte[] getEQ();
+        byte[] getP();
+        byte[] getQ();
+    }
 }

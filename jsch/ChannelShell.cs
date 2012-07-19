@@ -3,8 +3,8 @@ using Tamir.SharpSsh.java.lang;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -32,58 +32,67 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class ChannelShell : ChannelSession
-	{
-		internal bool xforwading=false;
-		internal bool pty=true;
-		public override void setXForwarding(bool foo){ xforwading=foo; }
-		public void setPty(bool foo){ pty=foo; }
-		public override void start()
-		{
-			try
-			{
-				Request request;
-				if(xforwading)
-				{
-					request=new RequestX11();
-					request.request(session, this);
-				}
-				if(pty)
-				{
-					request=new RequestPtyReq();
-					request.request(session, this);
-				}
-				request=new RequestShell();
-				request.request(session, this);
-			}
-			catch//(Exception e)
-			{
-				throw new JSchException("ChannelShell");
-			}
-			thread=new Thread(this);
-			thread.setName("Shell for "+session.host);
-			thread.start();
-		}
-		public override void init()
-		{
-			io.setInputStream(session.In);
-			io.setOutputStream(session.Out);
-		}
+    public class ChannelShell : ChannelSession
+    {
+        internal bool pty = true;
+        internal bool xforwading;
 
-		public void setPtySize(int col, int row, int wp, int hp)
-		{
-			//if(thread==null) return;
-			try
-			{
-				RequestWindowChange request=new RequestWindowChange();
-				request.setSize(row, col, wp, hp);
-				request.request(session, this);
-			}
-			catch(Exception e)
-			{
-				throw new JSchException("ChannelShell.setPtySize: "+e.ToString());
-			}
-		}
-	}
+        public override void setXForwarding(bool foo)
+        {
+            xforwading = foo;
+        }
 
+        public void setPty(bool foo)
+        {
+            pty = foo;
+        }
+
+        public override void start()
+        {
+            try
+            {
+                Request request;
+                if (xforwading)
+                {
+                    request = new RequestX11();
+                    request.request(session, this);
+                }
+                if (pty)
+                {
+                    request = new RequestPtyReq();
+                    request.request(session, this);
+                }
+                request = new RequestShell();
+                request.request(session, this);
+            }
+            catch //(Exception e)
+            {
+                throw new JSchException("ChannelShell");
+            }
+            thread = new Thread(this);
+            thread.setName("Shell for " + session.host);
+            thread.start();
+        }
+
+        public override void init()
+        {
+            io.setInputStream(session.In);
+            io.setOutputStream(session.Out);
+        }
+
+        public void setPtySize(int col, int row, int wp, int hp)
+        {
+            //if(thread==null) return;
+            try
+            {
+                var request = new RequestWindowChange();
+                request.setSize(row, col, wp, hp);
+                request.request(session, this);
+            }
+            catch (Exception e)
+            {
+                throw new JSchException("ChannelShell.setPtySize: " + e);
+            }
+        }
+    }
 }

@@ -1,10 +1,15 @@
 using System;
+using System.Collections;
 using System.IO;
+using System.Text;
+using System.Threading;
+using Tamir.SharpSsh.java.util;
+using Hashtable = System.Collections.Hashtable;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -32,129 +37,134 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class JSch
-	{
+    public class JSch
+    {
+        private static readonly Hashtable config;
+        private static readonly ReaderWriterLock configLock = new ReaderWriterLock();
 
-		static System.Collections.Hashtable config;
-		static System.Threading.ReaderWriterLock configLock = new System.Threading.ReaderWriterLock();
-	
-		static JSch()
-		{
-			config=new System.Collections.Hashtable();
+        internal Vector identities = new Vector();
+        //private KnownHosts known_hosts=null;
+        private HostKeyRepository known_hosts;
+        internal Vector pool = new Vector();
+        private ArrayList proxies;
 
-			//  config.Add("kex", "diffie-hellman-group-exchange-sha1");
-			config.Add("kex", "diffie-hellman-group1-sha1,diffie-hellman-group-exchange-sha1");
-			config.Add("server_host_key", "ssh-rsa,ssh-dss");
-			//config.Add("server_host_key", "ssh-dss,ssh-rsa");
+        static JSch()
+        {
+            config = new Hashtable();
 
-			//			config.Add("cipher.s2c", "3des-cbc,blowfish-cbc");
-			//			config.Add("cipher.c2s", "3des-cbc,blowfish-cbc");
+            //  config.Add("kex", "diffie-hellman-group-exchange-sha1");
+            config.Add("kex", "diffie-hellman-group1-sha1,diffie-hellman-group-exchange-sha1");
+            config.Add("server_host_key", "ssh-rsa,ssh-dss");
+            //config.Add("server_host_key", "ssh-dss,ssh-rsa");
 
-			config.Add("cipher.s2c", "3des-cbc,aes128-cbc");
-			config.Add("cipher.c2s", "3des-cbc,aes128-cbc");
+            //			config.Add("cipher.s2c", "3des-cbc,blowfish-cbc");
+            //			config.Add("cipher.c2s", "3des-cbc,blowfish-cbc");
 
-			//			config.Add("mac.s2c", "hmac-md5,hmac-sha1,hmac-sha1-96,hmac-md5-96");
-			//			config.Add("mac.c2s", "hmac-md5,hmac-sha1,hmac-sha1-96,hmac-md5-96");
-			config.Add("mac.s2c", "hmac-md5,hmac-sha1");
-			config.Add("mac.c2s", "hmac-md5,hmac-sha1");
-			config.Add("compression.s2c", "none");
-			config.Add("compression.c2s", "none");
-			config.Add("lang.s2c", "");
-			config.Add("lang.c2s", "");
+            config.Add("cipher.s2c", "3des-cbc,aes128-cbc");
+            config.Add("cipher.c2s", "3des-cbc,aes128-cbc");
 
-			config.Add("diffie-hellman-group-exchange-sha1", 
-				"Tamir.SharpSsh.jsch.DHGEX");
-			config.Add("diffie-hellman-group1-sha1", 
-				"Tamir.SharpSsh.jsch.DHG1");
+            //			config.Add("mac.s2c", "hmac-md5,hmac-sha1,hmac-sha1-96,hmac-md5-96");
+            //			config.Add("mac.c2s", "hmac-md5,hmac-sha1,hmac-sha1-96,hmac-md5-96");
+            config.Add("mac.s2c", "hmac-md5,hmac-sha1");
+            config.Add("mac.c2s", "hmac-md5,hmac-sha1");
+            config.Add("compression.s2c", "none");
+            config.Add("compression.c2s", "none");
+            config.Add("lang.s2c", "");
+            config.Add("lang.c2s", "");
 
-			config.Add("dh",            "Tamir.SharpSsh.jsch.jce.DH");
-			config.Add("3des-cbc",      "Tamir.SharpSsh.jsch.jce.TripleDESCBC");
-			//config.Add("blowfish-cbc",  "Tamir.SharpSsh.jsch.jce.BlowfishCBC");
-			config.Add("hmac-sha1",     "Tamir.SharpSsh.jsch.jce.HMACSHA1");
-			config.Add("hmac-sha1-96",  "Tamir.SharpSsh.jsch.jce.HMACSHA196");
-			config.Add("hmac-md5",      "Tamir.SharpSsh.jsch.jce.HMACMD5");
-			config.Add("hmac-md5-96",   "Tamir.SharpSsh.jsch.jce.HMACMD596");
-			config.Add("sha-1",         "Tamir.SharpSsh.jsch.jce.SHA1");
-			config.Add("md5",           "Tamir.SharpSsh.jsch.jce.MD5");
-			config.Add("signature.dss", "Tamir.SharpSsh.jsch.jce.SignatureDSA");
-			config.Add("signature.rsa", "Tamir.SharpSsh.jsch.jce.SignatureRSA");
-			config.Add("keypairgen.dsa",   "Tamir.SharpSsh.jsch.jce.KeyPairGenDSA");
-			config.Add("keypairgen.rsa",   "Tamir.SharpSsh.jsch.jce.KeyPairGenRSA");
-			config.Add("random",        "Tamir.SharpSsh.jsch.jce.Random");
+            config.Add("diffie-hellman-group-exchange-sha1",
+                       "Tamir.SharpSsh.jsch.DHGEX");
+            config.Add("diffie-hellman-group1-sha1",
+                       "Tamir.SharpSsh.jsch.DHG1");
 
-			config.Add("aes128-cbc",    "Tamir.SharpSsh.jsch.jce.AES128CBC");
+            config.Add("dh", "Tamir.SharpSsh.jsch.jce.DH");
+            config.Add("3des-cbc", "Tamir.SharpSsh.jsch.jce.TripleDESCBC");
+            //config.Add("blowfish-cbc",  "Tamir.SharpSsh.jsch.jce.BlowfishCBC");
+            config.Add("hmac-sha1", "Tamir.SharpSsh.jsch.jce.HMACSHA1");
+            config.Add("hmac-sha1-96", "Tamir.SharpSsh.jsch.jce.HMACSHA196");
+            config.Add("hmac-md5", "Tamir.SharpSsh.jsch.jce.HMACMD5");
+            config.Add("hmac-md5-96", "Tamir.SharpSsh.jsch.jce.HMACMD596");
+            config.Add("sha-1", "Tamir.SharpSsh.jsch.jce.SHA1");
+            config.Add("md5", "Tamir.SharpSsh.jsch.jce.MD5");
+            config.Add("signature.dss", "Tamir.SharpSsh.jsch.jce.SignatureDSA");
+            config.Add("signature.rsa", "Tamir.SharpSsh.jsch.jce.SignatureRSA");
+            config.Add("keypairgen.dsa", "Tamir.SharpSsh.jsch.jce.KeyPairGenDSA");
+            config.Add("keypairgen.rsa", "Tamir.SharpSsh.jsch.jce.KeyPairGenRSA");
+            config.Add("random", "Tamir.SharpSsh.jsch.jce.Random");
 
-			//config.Add("zlib",          "com.jcraft.jsch.jcraft.Compression");
+            config.Add("aes128-cbc", "Tamir.SharpSsh.jsch.jce.AES128CBC");
 
-			config.Add("StrictHostKeyChecking",  "ask");
-		}
-	
-		internal Tamir.SharpSsh.java.util.Vector pool=new Tamir.SharpSsh.java.util.Vector();
-		internal Tamir.SharpSsh.java.util.Vector identities=new Tamir.SharpSsh.java.util.Vector();
-		//private KnownHosts known_hosts=null;
-		private HostKeyRepository known_hosts=null;
+            //config.Add("zlib",          "com.jcraft.jsch.jcraft.Compression");
 
-		public JSch()
-		{
-		}
+            config.Add("StrictHostKeyChecking", "ask");
+        }
 
-		public Session getSession(String username, String host)  { return getSession(username, host, 22); }
-		public Session getSession(String username, String host, int port)  
-		{
-			Session s=new Session(this); 
-			s.setUserName(username);
-			s.setHost(host);
-			s.setPort(port);
-			pool.Add(s);
-			return s;
-		}
+        public Session getSession(String username, String host)
+        {
+            return getSession(username, host, 22);
+        }
 
-		internal bool removeSession(Session session)
-		{
-			lock(pool)
-			{
-				return pool.remove(session);
-			}
-		}
+        public Session getSession(String username, String host, int port)
+        {
+            var s = new Session(this);
+            s.setUserName(username);
+            s.setHost(host);
+            s.setPort(port);
+            pool.Add(s);
+            return s;
+        }
 
-		public void setHostKeyRepository(HostKeyRepository foo)
-		{
-			known_hosts=foo;
-		}
-		public void setKnownHosts(String foo) 
-		{
-			if(known_hosts==null) known_hosts=new KnownHosts(this);
-			if(known_hosts is KnownHosts)
-			{
-				lock(known_hosts)
-				{
-					((KnownHosts)known_hosts).setKnownHosts(foo); 
-				}
-			}
-		}
-		public void setKnownHosts(StreamReader foo) 
-		{ 
-			if(known_hosts==null) known_hosts=new KnownHosts(this);
-			if(known_hosts is KnownHosts)
-			{
-				lock(known_hosts)
-				{
-					((KnownHosts)known_hosts).setKnownHosts(foo); 
-				}
-			}
-		}
-		/*
+        internal bool removeSession(Session session)
+        {
+            lock (pool)
+            {
+                return pool.remove(session);
+            }
+        }
+
+        public void setHostKeyRepository(HostKeyRepository foo)
+        {
+            known_hosts = foo;
+        }
+
+        public void setKnownHosts(String foo)
+        {
+            if (known_hosts == null) known_hosts = new KnownHosts(this);
+            if (known_hosts is KnownHosts)
+            {
+                lock (known_hosts)
+                {
+                    ((KnownHosts) known_hosts).setKnownHosts(foo);
+                }
+            }
+        }
+
+        public void setKnownHosts(StreamReader foo)
+        {
+            if (known_hosts == null) known_hosts = new KnownHosts(this);
+            if (known_hosts is KnownHosts)
+            {
+                lock (known_hosts)
+                {
+                    ((KnownHosts) known_hosts).setKnownHosts(foo);
+                }
+            }
+        }
+
+        /*
 		HostKeyRepository getKnownHosts(){ 
 			if(known_hosts==null) known_hosts=new KnownHosts(this);
 			return known_hosts; 
 		}
 		*/
-		public HostKeyRepository getHostKeyRepository()
-		{ 
-			if(known_hosts==null) known_hosts=new KnownHosts(this);
-			return known_hosts; 
-		}
-		/*
+
+        public HostKeyRepository getHostKeyRepository()
+        {
+            if (known_hosts == null) known_hosts = new KnownHosts(this);
+            return known_hosts;
+        }
+
+        /*
 		public HostKey[] getHostKey(){
 			if(known_hosts==null) return null;
 			return known_hosts.getHostKey(); 
@@ -167,89 +177,95 @@ namespace Tamir.SharpSsh.jsch
 			known_hosts.remove(foo, type, key); 
 		}
 		*/
-		public void addIdentity(String foo) 
-		{
-			addIdentity(foo, (String)null);
-		}
-		public void addIdentity(String foo, String bar) 
-		{
-			Identity identity=new IdentityFile(foo, this);
-			if(bar!=null) identity.setPassphrase(bar);
-			identities.Add(identity);
-		}
-		internal String getConfig(String foo)
-		{
-			try
-			{
-				configLock.AcquireReaderLock(0);
-				return (String)(config[foo]);
-			}
-			finally
-			{
-				configLock.ReleaseReaderLock();
-			}
-		}
 
-		private System.Collections.ArrayList proxies;
-		void setProxy(String hosts, Proxy proxy)
-		{
-			String[] patterns=Util.split(hosts, ",");
-			if(proxies==null){proxies=new System.Collections.ArrayList();}
-			lock(proxies)
-			{
-				for(int i=0; i<patterns.Length; i++)
-				{
-					if(proxy==null)
-					{
-						proxies[0] = null;
-						proxies[0] = System.Text.Encoding.Default.GetBytes( patterns[i] );
-					}
-					else
-					{
-						proxies.Add( System.Text.Encoding.Default.GetBytes( patterns[i] ) );
-						proxies.Add(proxy);
-					}
-				}
-			}
-		}
-		internal Proxy getProxy(String host)
-		{
-			if(proxies==null)return null;
-			byte[] _host= System.Text.Encoding.Default.GetBytes( host );
-			lock(proxies)
-			{
-				for(int i=0; i<proxies.Count; i+=2)
-				{
-					if(Util.glob(((byte[])proxies[i]), _host))
-					{
-						return (Proxy)(proxies[i+1]);
-					}
-				}
-			}
-			return null;
-		}
-		internal void removeProxy()
-		{
-			proxies=null;
-		}
+        public void addIdentity(String foo)
+        {
+            addIdentity(foo, null);
+        }
 
-		public static void setConfig(System.Collections.Hashtable foo)
-		{
-			try
-			{
-				configLock.AcquireWriterLock(0);
-				System.Collections.IEnumerator e=foo.Keys.GetEnumerator();
-				while(e.MoveNext())
-				{
-					String key=(String)(e.Current);
-					config.Add(key, (String)(foo[key]));
-				}
-			}
-			finally
-			{
-				configLock.ReleaseReaderLock();
-			}
-		}
-	}
+        public void addIdentity(String foo, String bar)
+        {
+            Identity identity = new IdentityFile(foo, this);
+            if (bar != null) identity.setPassphrase(bar);
+            identities.Add(identity);
+        }
 
+        internal String getConfig(String foo)
+        {
+            try
+            {
+                configLock.AcquireReaderLock(0);
+                return (String) (config[foo]);
+            }
+            finally
+            {
+                configLock.ReleaseReaderLock();
+            }
+        }
+
+        private void setProxy(String hosts, Proxy proxy)
+        {
+            String[] patterns = Util.split(hosts, ",");
+            if (proxies == null)
+            {
+                proxies = new ArrayList();
+            }
+            lock (proxies)
+            {
+                for (int i = 0; i < patterns.Length; i++)
+                {
+                    if (proxy == null)
+                    {
+                        proxies[0] = null;
+                        proxies[0] = Encoding.Default.GetBytes(patterns[i]);
+                    }
+                    else
+                    {
+                        proxies.Add(Encoding.Default.GetBytes(patterns[i]));
+                        proxies.Add(proxy);
+                    }
+                }
+            }
+        }
+
+        internal Proxy getProxy(String host)
+        {
+            if (proxies == null) return null;
+            byte[] _host = Encoding.Default.GetBytes(host);
+            lock (proxies)
+            {
+                for (int i = 0; i < proxies.Count; i += 2)
+                {
+                    if (Util.glob(((byte[]) proxies[i]), _host))
+                    {
+                        return (Proxy) (proxies[i + 1]);
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal void removeProxy()
+        {
+            proxies = null;
+        }
+
+        public static void setConfig(Hashtable foo)
+        {
+            try
+            {
+                configLock.AcquireWriterLock(0);
+                IEnumerator e = foo.Keys.GetEnumerator();
+                while (e.MoveNext())
+                {
+                    var key = (String) (e.Current);
+                    config.Add(key, (foo[key]));
+                }
+            }
+            finally
+            {
+                configLock.ReleaseReaderLock();
+            }
+        }
+    }
 }

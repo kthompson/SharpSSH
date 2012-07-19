@@ -2,8 +2,8 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,24 +31,36 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	class RequestSignal : Request
-	{
-		String signal="KILL";
-		public void setSignal(String foo){ signal=foo; }
-		public void request(Session session, Channel channel)
-		{
-			Buffer buf=new Buffer();
-			Packet packet=new Packet(buf);
+    internal class RequestSignal : Request
+    {
+        private String signal = "KILL";
 
-			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString( Util.getBytes("signal"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(Util.getBytes(signal));
-			session.write(packet);
-		}
-		public bool waitForReply(){ return false; }
-	}
+        #region Request Members
 
+        public void request(Session session, Channel channel)
+        {
+            var buf = new Buffer();
+            var packet = new Packet(buf);
+
+            packet.reset();
+            buf.putByte(Session.SSH_MSG_CHANNEL_REQUEST);
+            buf.putInt(channel.getRecipient());
+            buf.putString(Util.getBytes("signal"));
+            buf.putByte((byte) (waitForReply() ? 1 : 0));
+            buf.putString(Util.getBytes(signal));
+            session.write(packet);
+        }
+
+        public bool waitForReply()
+        {
+            return false;
+        }
+
+        #endregion
+
+        public void setSignal(String foo)
+        {
+            signal = foo;
+        }
+    }
 }

@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,27 +29,26 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	abstract class UserAuth
-	{
-		public virtual bool start(Session session)
-		{
-			Packet packet=session.packet;
-			Buffer buf=session.buf;
-			// send
-			// byte      SSH_MSG_SERVICE_REQUEST(5)
-			// string    service name "ssh-userauth"
-			packet.reset();
-			buf.putByte((byte)Session.SSH_MSG_SERVICE_REQUEST);
-			buf.putString(Util.getBytes("ssh-userauth"));
-			session.write(packet);
+    internal abstract class UserAuth
+    {
+        public virtual bool start(Session session)
+        {
+            Packet packet = session.packet;
+            Buffer buf = session.buf;
+            // send
+            // byte      SSH_MSG_SERVICE_REQUEST(5)
+            // string    service name "ssh-userauth"
+            packet.reset();
+            buf.putByte(Session.SSH_MSG_SERVICE_REQUEST);
+            buf.putString(Util.getBytes("ssh-userauth"));
+            session.write(packet);
 
-			// receive
-			// byte      SSH_MSG_SERVICE_ACCEPT(6)
-			// string    service name
-			buf=session.read(buf);
-			//System.out.println("read: 6 ? "+buf.buffer[5]);
-			return buf.buffer[5]==6;
-		}
-	}
-
+            // receive
+            // byte      SSH_MSG_SERVICE_ACCEPT(6)
+            // string    service name
+            buf = session.read(buf);
+            //System.out.println("read: 6 ? "+buf.buffer[5]);
+            return buf.buffer[5] == 6;
+        }
+    }
 }

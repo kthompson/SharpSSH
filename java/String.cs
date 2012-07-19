@@ -1,177 +1,178 @@
-using System;
-using Text = System.Text;
+using System.Text;
 using Str = System.String;
 
 namespace Tamir.SharpSsh.java
 {
-	/// <summary>
-	/// Summary description for String.
-	/// </summary>
-	public class String
-	{
-		string s;
-		public String(string s)
-		{
-			this.s=s;
-		}
+    /// <summary>
+    /// Summary description for String.
+    /// </summary>
+    public class String
+    {
+        private readonly string s;
 
-		public String(object o):this(o.ToString())
-		{
-		}
+        public String(string s)
+        {
+            this.s = s;
+        }
 
-		public String(byte[] arr):this(getString(arr))
-		{
-		}
+        public String(object o) : this(o.ToString())
+        {
+        }
 
-		public String(byte[] arr, int offset, int len):this(getString(arr, offset, len))
-		{
-		}
+        public String(byte[] arr) : this(getString(arr))
+        {
+        }
 
-		public static implicit operator String (string s1) 
-		{
-			if(s1==null) return null;
-			return new String(s1);
-		}
+        public String(byte[] arr, int offset, int len) : this(getString(arr, offset, len))
+        {
+        }
 
-		public static implicit operator Str (String s1) 
-		{
-			if(s1==null) return null;
-			return s1.ToString();
-		}
+        public static implicit operator String(string s1)
+        {
+            if (s1 == null) return null;
+            return new String(s1);
+        }
 
-		public static Tamir.SharpSsh.java.String operator+(Tamir.SharpSsh.java.String s1, Tamir.SharpSsh.java.String s2)
-		{
-			return new Tamir.SharpSsh.java.String(s1.ToString()+s2.ToString());
-		}
+        public static implicit operator Str(String s1)
+        {
+            if (s1 == null) return null;
+            return s1.ToString();
+        }
 
-		public byte[] getBytes()
-		{
-			return String.getBytes(this);
-		}
+        public static String operator +(String s1, String s2)
+        {
+            return new String(s1.ToString() + s2.ToString());
+        }
 
-		public override string ToString()
-		{
-			return s;
-		}
+        public byte[] getBytes()
+        {
+            return getBytes(this);
+        }
 
-		public String toLowerCase()
-		{
-			return this.ToString().ToLower();
-		}
+        public override string ToString()
+        {
+            return s;
+        }
 
-		public bool startsWith(string prefix)
-		{
-			return this.ToString().StartsWith(prefix);
-		}
+        public String toLowerCase()
+        {
+            return ToString().ToLower();
+        }
 
-		public int indexOf(string sub)
-		{
-			return this.ToString().IndexOf(sub);
-		}
-		
-		public int indexOf(char sub)
-		{
-			return this.ToString().IndexOf(sub);
-		}
-		
-		public int indexOf(char sub, int i)
-		{
-			return this.ToString().IndexOf(sub, i);
-		}
+        public bool startsWith(string prefix)
+        {
+            return ToString().StartsWith(prefix);
+        }
 
-		public char charAt(int i)
-		{
-			return s[i];
-		}
+        public int indexOf(string sub)
+        {
+            return ToString().IndexOf(sub);
+        }
 
-		public String substring(int start, int end)
-		{
-			int len = end - start;
-			return this.ToString().Substring(start, len);
-		}
+        public int indexOf(char sub)
+        {
+            return ToString().IndexOf(sub);
+        }
 
-		public String subString(int start, int len)
-		{
-			return substring(start, len);
-		}
+        public int indexOf(char sub, int i)
+        {
+            return ToString().IndexOf(sub, i);
+        }
 
-		public String substring(int len)
-		{
-			return this.ToString().Substring(len);
-		}
+        public char charAt(int i)
+        {
+            return s[i];
+        }
 
-		public String subString(int len)
-		{
-			return substring(len);
-		}
+        public String substring(int start, int end)
+        {
+            int len = end - start;
+            return ToString().Substring(start, len);
+        }
 
-		public int Length()
-		{
-			return this.ToString().Length;
-		}
-		
-		public int length()
-		{
-			return Length();
-		}
+        public String subString(int start, int len)
+        {
+            return substring(start, len);
+        }
 
-		public bool endsWith(string str)
-		{
-			return s.EndsWith(str);
-		}
+        public String substring(int len)
+        {
+            return ToString().Substring(len);
+        }
 
-		public int lastIndexOf(string str)
-		{
-			return s.LastIndexOf(str);
-		}
+        public String subString(int len)
+        {
+            return substring(len);
+        }
 
-		public int lastIndexOf(char c)
-		{
-			return s.LastIndexOf(c);
-		}
+        public int Length()
+        {
+            return ToString().Length;
+        }
 
-		public bool equals(object o)
-		{
-			return this.ToString().Equals(o.ToString());
-		}
+        public int length()
+        {
+            return Length();
+        }
 
-		public override bool Equals(object obj)
-		{
-			return this.equals (obj);
-		}
+        public bool endsWith(string str)
+        {
+            return s.EndsWith(str);
+        }
 
-		public override int GetHashCode()
-		{
-			return s.GetHashCode ();
-		}
+        public int lastIndexOf(string str)
+        {
+            return s.LastIndexOf(str);
+        }
 
-		public static string getString(byte[] arr)
-		{
-			return getString(arr, 0, arr.Length);
-		}
+        public int lastIndexOf(char c)
+        {
+            return s.LastIndexOf(c);
+        }
 
-		public static string getString(byte[] arr, int offset, int len)
-		{
-			return Text.Encoding.Default.GetString(arr, offset, len);
-		}
+        public bool equals(object o)
+        {
+            return ToString().Equals(o.ToString());
+        }
 
-		public static string getStringUTF8(byte[] arr)
-		{
-			return getStringUTF8(arr, 0, arr.Length);
-		}
+        public override bool Equals(object obj)
+        {
+            return @equals(obj);
+        }
 
-		public static string getStringUTF8(byte[] arr, int offset, int len)
-		{
-			return Text.Encoding.UTF8.GetString(arr, offset, len);
-		}
+        public override int GetHashCode()
+        {
+            return s.GetHashCode();
+        }
 
-		public static byte[] getBytes(string str)
-		{
-			return getBytesUTF8( str );
-		}
-		public static byte[] getBytesUTF8(string str)
-		{
-			return Text.Encoding.UTF8.GetBytes( str );
-		}
-	}
+        public static string getString(byte[] arr)
+        {
+            return getString(arr, 0, arr.Length);
+        }
+
+        public static string getString(byte[] arr, int offset, int len)
+        {
+            return Encoding.Default.GetString(arr, offset, len);
+        }
+
+        public static string getStringUTF8(byte[] arr)
+        {
+            return getStringUTF8(arr, 0, arr.Length);
+        }
+
+        public static string getStringUTF8(byte[] arr, int offset, int len)
+        {
+            return Encoding.UTF8.GetString(arr, offset, len);
+        }
+
+        public static byte[] getBytes(string str)
+        {
+            return getBytesUTF8(str);
+        }
+
+        public static byte[] getBytesUTF8(string str)
+        {
+            return Encoding.UTF8.GetBytes(str);
+        }
+    }
 }

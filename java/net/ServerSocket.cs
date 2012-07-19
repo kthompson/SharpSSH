@@ -1,27 +1,25 @@
-using System;
-using System.Net;
 using System.Net.Sockets;
 
 namespace Tamir.SharpSsh.java.net
 {
-	/// <summary>
-	/// Summary description for ServerSocket.
-	/// </summary>
-	public class ServerSocket : TcpListener
-	{
-		public ServerSocket(int port, int arg, InetAddress addr) : base(addr.addr, port)
-		{
-			this.Start();
-		}
+    /// <summary>
+    /// Summary description for ServerSocket.
+    /// </summary>
+    public class ServerSocket : TcpListener
+    {
+        public ServerSocket(int port, int arg, InetAddress addr) : base(addr.addr, port)
+        {
+            Start();
+        }
 
-		public Tamir.SharpSsh.java.net.Socket accept()
-		{
-			return new Tamir.SharpSsh.java.net.Socket( this.AcceptSocket() );
-		}
+        public Socket accept()
+        {
+            return new Socket(AcceptSocket());
+        }
 
-		public void close()
-		{
-			this.Stop();
-		}
-	}
+        public void close()
+        {
+            Stop();
+        }
+    }
 }

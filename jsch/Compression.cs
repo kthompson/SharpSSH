@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,12 +29,12 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public abstract class Compression
-	{
-		public const int INFLATER=0;
-		public const int DEFLATER=1;
-		public abstract void init(int type, int level);
-		public abstract int compress(byte[] buf, int start, int len);
-		public abstract byte[] uncompress(byte[] buf, int start, int[] len);
-	}
+    public abstract class Compression
+    {
+        public const int INFLATER = 0;
+        public const int DEFLATER = 1;
+        public abstract void init(int type, int level);
+        public abstract int compress(byte[] buf, int start, int len);
+        public abstract byte[] uncompress(byte[] buf, int start, int[] len);
+    }
 }

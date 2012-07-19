@@ -1,9 +1,9 @@
-using System;
+using System.Security.Cryptography;
 
 namespace Tamir.SharpSsh.jsch.jce
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,24 +31,26 @@ namespace Tamir.SharpSsh.jsch.jce
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class KeyPairGenDSA : Tamir.SharpSsh.jsch.KeyPairGenDSA 
-	{
-		byte[] x;  // private
-		byte[] y;  // public
-		byte[] p;
-		byte[] q;
-		byte[] g;
+    public class KeyPairGenDSA : jsch.KeyPairGenDSA
+    {
+        private byte[] g;
+        private byte[] p;
+        private byte[] q;
+        private byte[] x; // private
+        private byte[] y; // public
 
-		public void init(int key_size)
-		{
+        #region KeyPairGenDSA Members
+
+        public void init(int key_size)
+        {
 //			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
 //			keyGen.initialize(key_size, new SecureRandom());
 //			KeyPair pair = keyGen.generateKeyPair();
 //			PublicKey pubKey=pair.getPublic();
 //			PrivateKey prvKey=pair.getPrivate();
 
-			System.Security.Cryptography.DSACryptoServiceProvider dsa = new System.Security.Cryptography.DSACryptoServiceProvider(key_size);
-			System.Security.Cryptography.DSAParameters DSAKeyInfo = dsa.ExportParameters(true);
+            var dsa = new DSACryptoServiceProvider(key_size);
+            DSAParameters DSAKeyInfo = dsa.ExportParameters(true);
 
 //			x=((DSAPrivateKey)prvKey).getX().toByteArray();
 //			y=((DSAPublicKey)pubKey).getY().toByteArray();
@@ -58,17 +60,38 @@ namespace Tamir.SharpSsh.jsch.jce
 //			q=_params.getQ().toByteArray();
 //			g=_params.getG().toByteArray();
 
-			x = DSAKeyInfo.X;
-			y = DSAKeyInfo.Y;
-			p = DSAKeyInfo.P;
-			q = DSAKeyInfo.Q;
-			g = DSAKeyInfo.G;
-		}
-		public byte[] getX(){return x;}
-		public byte[] getY(){return y;}
-		public byte[] getP(){return p;}
-		public byte[] getQ(){return q;}
-		public byte[] getG(){return g;}
-	}
+            x = DSAKeyInfo.X;
+            y = DSAKeyInfo.Y;
+            p = DSAKeyInfo.P;
+            q = DSAKeyInfo.Q;
+            g = DSAKeyInfo.G;
+        }
 
+        public byte[] getX()
+        {
+            return x;
+        }
+
+        public byte[] getY()
+        {
+            return y;
+        }
+
+        public byte[] getP()
+        {
+            return p;
+        }
+
+        public byte[] getQ()
+        {
+            return q;
+        }
+
+        public byte[] getG()
+        {
+            return g;
+        }
+
+        #endregion
+    }
 }

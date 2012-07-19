@@ -3,8 +3,8 @@ using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -32,31 +32,41 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	internal class RequestExec : Request
-	{
-		private String command="";
-		internal RequestExec(String foo)
-		{
-			this.command=foo;
-		}
-		public void request(Session session, Channel channel)
-		{
-			Packet packet=session.packet;
-			Buffer buf=session.buf;
-			// send
-			// byte     SSH_MSG_CHANNEL_REQUEST(98)
-			// uint32 recipient channel
-			// string request type       // "exec"
-			// boolean want reply        // 0
-			// string command
-			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(new Str("exec").getBytes());
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(new Str(command).getBytes());
-			session.write(packet);
-		}
-		public bool waitForReply(){ return false; }
-	}
+    internal class RequestExec : Request
+    {
+        private readonly String command = "";
+
+        internal RequestExec(String foo)
+        {
+            command = foo;
+        }
+
+        #region Request Members
+
+        public void request(Session session, Channel channel)
+        {
+            Packet packet = session.packet;
+            Buffer buf = session.buf;
+            // send
+            // byte     SSH_MSG_CHANNEL_REQUEST(98)
+            // uint32 recipient channel
+            // string request type       // "exec"
+            // boolean want reply        // 0
+            // string command
+            packet.reset();
+            buf.putByte(Session.SSH_MSG_CHANNEL_REQUEST);
+            buf.putInt(channel.getRecipient());
+            buf.putString(new Str("exec").getBytes());
+            buf.putByte((byte) (waitForReply() ? 1 : 0));
+            buf.putString(new Str(command).getBytes());
+            session.write(packet);
+        }
+
+        public bool waitForReply()
+        {
+            return false;
+        }
+
+        #endregion
+    }
 }

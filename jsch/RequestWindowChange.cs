@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -33,21 +31,17 @@ namespace Tamir.SharpSsh.jsch
 
     public class RequestWindowChange : Request
     {
-        internal int width_columns = 80;
-        internal int height_rows = 24;
-        internal int width_pixels = 640;
         internal int height_pixels = 480;
-        public void setSize(int row, int col, int wp, int hp)
-        {
-            this.width_columns = col;
-            this.height_rows = row;
-            this.width_pixels = wp;
-            this.height_pixels = hp;
-        }
+        internal int height_rows = 24;
+        internal int width_columns = 80;
+        internal int width_pixels = 640;
+
+        #region Request Members
+
         public void request(Session session, Channel channel)
         {
-            Buffer buf = new Buffer();
-            Packet packet = new Packet(buf);
+            var buf = new Buffer();
+            var packet = new Packet(buf);
 
             //byte      SSH_MSG_CHANNEL_REQUEST
             //uint32    recipient_channel
@@ -58,17 +52,30 @@ namespace Tamir.SharpSsh.jsch
             //uint32    terminal width, pixels
             //uint32    terminal height, pixels
             packet.reset();
-            buf.putByte((byte)Session.SSH_MSG_CHANNEL_REQUEST);
+            buf.putByte(Session.SSH_MSG_CHANNEL_REQUEST);
             buf.putInt(channel.getRecipient());
             buf.putString(Util.getBytes("window-change"));
-            buf.putByte((byte)(waitForReply() ? 1 : 0));
+            buf.putByte((byte) (waitForReply() ? 1 : 0));
             buf.putInt(width_columns);
             buf.putInt(height_rows);
             buf.putInt(width_pixels);
             buf.putInt(height_pixels);
             session.write(packet);
         }
-        public bool waitForReply() { return false; }
-    }
 
+        public bool waitForReply()
+        {
+            return false;
+        }
+
+        #endregion
+
+        public void setSize(int row, int col, int wp, int hp)
+        {
+            width_columns = col;
+            height_rows = row;
+            width_pixels = wp;
+            height_pixels = hp;
+        }
+    }
 }

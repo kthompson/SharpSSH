@@ -2,8 +2,8 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,12 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public abstract class SftpProgressMonitor
-	{
-		public static int PUT=0;
-		public static int GET=1;
-		public abstract void init(int op, String src, String dest, long max);
-		public abstract bool count(long count);
-		public abstract void end();
-	}
+    public abstract class SftpProgressMonitor
+    {
+        public static int PUT;
+        public static int GET = 1;
+        public abstract void init(int op, String src, String dest, long max);
+        public abstract bool count(long count);
+        public abstract void end();
+    }
 }

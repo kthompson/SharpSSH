@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using Tamir.SharpSsh.java.io;
+using Tamir.Streams;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -33,137 +34,149 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class IO
-	{
-		internal JStream ins;
-		internal JStream outs;
-		internal JStream outs_ext;
+    public class IO
+    {
+        private bool in_dontclose;
+        internal JStream ins;
+        private bool out_dontclose;
+        internal JStream outs;
+        internal JStream outs_ext;
 
-		private bool in_dontclose=false;
-		private bool out_dontclose=false;
-		private bool outs_ext_dontclose=false;
+        private bool outs_ext_dontclose;
 
-		public void setOutputStream(Stream outs)
-		{
-			if(outs!=null)
-			{
-				this.outs= new JStream(outs); 
-			}
-			else
-			{
-				this.outs=null;
-			}
-		}
-		public void setOutputStream(Stream outs, bool dontclose)
-		{
-			this.out_dontclose=dontclose;
-			setOutputStream(outs);
-		}
-		public void setExtOutputStream(Stream outs)
-		{
-			if(outs!=null)
-			{
-				this.outs_ext=new JStream(outs); 
-			}
-			else
-			{
-				this.outs_ext=null;
-			}
-		}
-		public void setExtOutputStream(Stream outs, bool dontclose)
-		{
-			this.outs_ext_dontclose=dontclose;
-			setExtOutputStream(outs);
-		}
-		public void setInputStream(Stream ins)
-		{ 
-			//ConsoleStream low buffer patch
-			if(ins!=null)
-			{
-				if(ins.GetType() == Type.GetType("System.IO.__ConsoleStream"))
-				{
-					ins = new Tamir.Streams.ProtectedConsoleStream(ins);
-				}
-				else if(ins.GetType() == Type.GetType("System.IO.FileStream"))
-				{
-					ins = new Tamir.Streams.ProtectedConsoleStream(ins);
-				}
-				this.ins=new JStream(ins);
-			}
-			else
-			{
-				this.ins=null;
-			}
-		}
-		public void setInputStream(Stream ins, bool dontclose)
-		{
-			this.in_dontclose=dontclose;
-			setInputStream(ins);
-		}
+        public void setOutputStream(Stream outs)
+        {
+            if (outs != null)
+            {
+                this.outs = new JStream(outs);
+            }
+            else
+            {
+                this.outs = null;
+            }
+        }
 
-		public void put(Packet p)
-		{
-			outs.Write(p.buffer.buffer, 0, p.buffer.index);
-			outs.Flush();
-		}
-		internal void put(byte[] array, int begin, int length)
-		{
-			outs.Write(array, begin, length);
-			outs.Flush();
-		}
-		internal void put_ext(byte[] array, int begin, int length)
-		{
-			outs_ext.Write(array, begin, length);
-			outs_ext.Flush();
-		}
+        public void setOutputStream(Stream outs, bool dontclose)
+        {
+            out_dontclose = dontclose;
+            setOutputStream(outs);
+        }
 
-		internal int getByte()
-		{
-			int res = ins.ReadByte()&0xff;
-			return res; 
-		}
+        public void setExtOutputStream(Stream outs)
+        {
+            if (outs != null)
+            {
+                outs_ext = new JStream(outs);
+            }
+            else
+            {
+                outs_ext = null;
+            }
+        }
 
-		internal void getByte(byte[] array)
-		{
-			getByte(array, 0, array.Length);
-		}
+        public void setExtOutputStream(Stream outs, bool dontclose)
+        {
+            outs_ext_dontclose = dontclose;
+            setExtOutputStream(outs);
+        }
 
-		internal void getByte(byte[] array, int begin, int length)
-		{
-			do
-			{
-				int completed = ins.Read(array, begin, length);
-				if(completed<=0)
-				{
-					throw new IOException("End of IO Stream Read");
-				}
-				begin+=completed;
-				length-=completed;
-			}
-			while (length>0);
-		}
+        public void setInputStream(Stream ins)
+        {
+            //ConsoleStream low buffer patch
+            if (ins != null)
+            {
+                if (ins.GetType() == Type.GetType("System.IO.__ConsoleStream"))
+                {
+                    ins = new ProtectedConsoleStream(ins);
+                }
+                else if (ins.GetType() == Type.GetType("System.IO.FileStream"))
+                {
+                    ins = new ProtectedConsoleStream(ins);
+                }
+                this.ins = new JStream(ins);
+            }
+            else
+            {
+                this.ins = null;
+            }
+        }
 
-		public void close()
-		{
-			try
-			{
-				if(ins!=null && !in_dontclose) ins.Close();
-				ins=null;
-			}
-			catch(Exception){}
-			try
-			{
-				if(outs!=null && !out_dontclose) outs.Close();
-				outs=null;
-			}
-			catch(Exception){}
-			try
-			{
-				if(outs_ext!=null && !outs_ext_dontclose) outs_ext.Close();
-				outs_ext=null;
-			}
-			catch(Exception){}
-		}
+        public void setInputStream(Stream ins, bool dontclose)
+        {
+            in_dontclose = dontclose;
+            setInputStream(ins);
+        }
+
+        public void put(Packet p)
+        {
+            outs.Write(p.buffer.buffer, 0, p.buffer.index);
+            outs.Flush();
+        }
+
+        internal void put(byte[] array, int begin, int length)
+        {
+            outs.Write(array, begin, length);
+            outs.Flush();
+        }
+
+        internal void put_ext(byte[] array, int begin, int length)
+        {
+            outs_ext.Write(array, begin, length);
+            outs_ext.Flush();
+        }
+
+        internal int getByte()
+        {
+            int res = ins.ReadByte() & 0xff;
+            return res;
+        }
+
+        internal void getByte(byte[] array)
+        {
+            getByte(array, 0, array.Length);
+        }
+
+        internal void getByte(byte[] array, int begin, int length)
+        {
+            do
+            {
+                int completed = ins.Read(array, begin, length);
+                if (completed <= 0)
+                {
+                    throw new IOException("End of IO Stream Read");
+                }
+                begin += completed;
+                length -= completed;
+            } while (length > 0);
+        }
+
+        public void close()
+        {
+            try
+            {
+                if (ins != null && !in_dontclose) ins.Close();
+                ins = null;
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                if (outs != null && !out_dontclose) outs.Close();
+                outs = null;
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                if (outs_ext != null && !outs_ext_dontclose) outs_ext.Close();
+                outs_ext = null;
+            }
+            catch (Exception)
+            {
+            }
+        }
 
 //		public void finalize()
 //		{
@@ -178,6 +191,5 @@ namespace Tamir.SharpSsh.jsch
 //			}
 //			catch{}
 //		}
-	}
-
+    }
 }

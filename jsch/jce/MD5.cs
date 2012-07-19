@@ -1,9 +1,11 @@
 using System;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace Tamir.SharpSsh.jsch.jce
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,39 +33,45 @@ namespace Tamir.SharpSsh.jsch.jce
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class MD5 : Tamir.SharpSsh.jsch.HASH
-	{
-		//MessageDigest md;
-		internal System.Security.Cryptography.MD5CryptoServiceProvider md;
-		private System.Security.Cryptography.CryptoStream cs;
+    public class MD5 : HASH
+    {
+        //MessageDigest md;
+        private CryptoStream cs;
+        internal MD5CryptoServiceProvider md;
 
-		public override int getBlockSize(){return 16;}
-		public override void init() 
-		{
-			try
-			{ 
-				//md=MessageDigest.getInstance("MD5"); 
-				md = new System.Security.Cryptography.MD5CryptoServiceProvider();
-				cs = new System.Security.Cryptography.CryptoStream( System.IO.Stream.Null, md, System.Security.Cryptography.CryptoStreamMode.Write);
-			}
-			catch(Exception e)
-			{
-				Console.WriteLine(e);
-			}
-		}
-		public override void update(byte[] foo, int start, int len) 
-		{
-			//md.update(foo, start, len);
-			cs.Write(foo, start, len);
-		}
-		public override byte[] digest() 
-		{
-			cs.Close();
-			byte[] result = md.Hash; 
-			md.Clear();//Reinitiazing hash objects
-			init();
+        public override int getBlockSize()
+        {
+            return 16;
+        }
 
-			return result;
-		}
-	}
+        public override void init()
+        {
+            try
+            {
+                //md=MessageDigest.getInstance("MD5"); 
+                md = new MD5CryptoServiceProvider();
+                cs = new CryptoStream(Stream.Null, md, CryptoStreamMode.Write);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public override void update(byte[] foo, int start, int len)
+        {
+            //md.update(foo, start, len);
+            cs.Write(foo, start, len);
+        }
+
+        public override byte[] digest()
+        {
+            cs.Close();
+            byte[] result = md.Hash;
+            md.Clear(); //Reinitiazing hash objects
+            init();
+
+            return result;
+        }
+    }
 }

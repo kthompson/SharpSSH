@@ -1,13 +1,11 @@
 using System;
-using System.Net;
-using System.Net.Sockets;
 using System.IO;
 using Tamir.SharpSsh.java.lang;
 
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use ins source and binary forms, with or without
@@ -35,64 +33,79 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public class ChannelExec : ChannelSession
-	{
-		bool xforwading=false;
-		bool pty=false;
-		String command="";
-		/*
+    public class ChannelExec : ChannelSession
+    {
+        private String command = "";
+        private bool pty;
+        private bool xforwading;
+        /*
 		ChannelExec(){
 		  super();
 		  type="session".getBytes();
 		  io=new IO();
 		}
 		*/
-		public override void setXForwarding(bool foo){ xforwading=foo; }
-		public void setPty(bool foo){ pty=foo; }
-		public override void start()
-		{
-			try
-			{
-				Request request;
 
-				if(xforwading)
-				{
-					request=new RequestX11();
-					request.request(session, this);
-				}
+        public override void setXForwarding(bool foo)
+        {
+            xforwading = foo;
+        }
 
-				if(pty)
-				{
-					request=new RequestPtyReq();
-					request.request(session, this);
-				}
+        public void setPty(bool foo)
+        {
+            pty = foo;
+        }
 
-				request=new RequestExec(command);
-				request.request(session, this);
-			}
-			catch(Exception)
-			{
-				throw new JSchException("ChannelExec");
-			}
-			thread=new Thread(this);
-			thread.setName("Exec thread "+session.getHost());
-			thread.start();
-		}
-		public void setCommand(String foo){ command=foo;}
-		public override void init()
-		{
-			io.setInputStream(session.In);
-			io.setOutputStream(session.Out);
-		}
-		//public void finalize() throws java.lang.Throwable{ super.finalize(); }
-		public void setErrStream(Stream Out)
-		{
-			setExtOutputStream(Out);
-		}
-		public Stream getErrStream() 
-		{
-			return getExtInputStream();
-		}
-	}
+        public override void start()
+        {
+            try
+            {
+                Request request;
 
+                if (xforwading)
+                {
+                    request = new RequestX11();
+                    request.request(session, this);
+                }
+
+                if (pty)
+                {
+                    request = new RequestPtyReq();
+                    request.request(session, this);
+                }
+
+                request = new RequestExec(command);
+                request.request(session, this);
+            }
+            catch (Exception)
+            {
+                throw new JSchException("ChannelExec");
+            }
+            thread = new Thread(this);
+            thread.setName("Exec thread " + session.getHost());
+            thread.start();
+        }
+
+        public void setCommand(String foo)
+        {
+            command = foo;
+        }
+
+        public override void init()
+        {
+            io.setInputStream(session.In);
+            io.setOutputStream(session.Out);
+        }
+
+        //public void finalize() throws java.lang.Throwable{ super.finalize(); }
+        public void setErrStream(Stream Out)
+        {
+            setExtOutputStream(Out);
+        }
+
+        public Stream getErrStream()
+        {
+            return getExtInputStream();
+        }
+    }
 }

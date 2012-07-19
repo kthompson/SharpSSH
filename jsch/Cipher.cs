@@ -1,9 +1,7 @@
-using System;
-
 namespace Tamir.SharpSsh.jsch
 {
-	/* -*-mode:java; c-basic-offset:2; -*- */
-	/*
+    /* -*-mode:java; c-basic-offset:2; -*- */
+    /*
 	Copyright (c) 2002,2003,2004 ymnk, JCraft,Inc. All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
@@ -31,13 +29,13 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	public abstract class Cipher
-	{
-		internal static int ENCRYPT_MODE=0;
-		internal static int DECRYPT_MODE=1;
-		public abstract int getIVSize(); 
-		public abstract int getBlockSize(); 
-		public abstract void init(int mode, byte[] key, byte[] iv);
-		public abstract void update(byte[] foo, int s1, int len, byte[] bar, int s2);
-	}
+    public abstract class Cipher
+    {
+        internal static int ENCRYPT_MODE;
+        internal static int DECRYPT_MODE = 1;
+        public abstract int getIVSize();
+        public abstract int getBlockSize();
+        public abstract void init(int mode, byte[] key, byte[] iv);
+        public abstract void update(byte[] foo, int s1, int len, byte[] bar, int s2);
+    }
 }
