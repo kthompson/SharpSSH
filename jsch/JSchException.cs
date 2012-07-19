@@ -9,9 +9,6 @@ namespace Tamir.SharpSsh.jsch
     {
         public JSchException()
         {
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
         public JSchException(string msg) : base(msg)

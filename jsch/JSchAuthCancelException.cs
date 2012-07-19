@@ -7,9 +7,6 @@ namespace Tamir.SharpSsh.jsch
     {
         public JSchAuthCancelException()
         {
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
         public JSchAuthCancelException(string msg) : base(msg)
