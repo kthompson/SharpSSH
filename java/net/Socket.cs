@@ -20,11 +20,18 @@ namespace Tamir.SharpSsh.java.net
 
         public Socket(string host, int port)
         {
+
+            IPAddress addr;
+            if (!IPAddress.TryParse(host, out addr))
+            {
 #if NET_1_1
-			IPEndPoint ep = new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port);
+			    addr = Dns.GetHostByName(host).AddressList[0];
 #else
-            var ep = new IPEndPoint(Dns.GetHostEntry(host).AddressList[0], port);
+                addr = Dns.GetHostEntry(host).AddressList[0];
 #endif
+            }
+
+            var ep = new IPEndPoint(addr, port);
             sock = new Sock(ep.AddressFamily,
                             SocketType.Stream, ProtocolType.Tcp);
             sock.Connect(ep);
