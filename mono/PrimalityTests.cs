@@ -12,10 +12,8 @@ using System.Security.Cryptography;
 
 namespace Mono.Math.Prime
 {
-    [CLSCompliant(false)]
     internal delegate bool PrimalityTest(BigInteger bi, ConfidenceFactor confidence);
 
-    [CLSCompliant(false)]
     internal sealed class PrimalityTests
     {
         #region SPP Test

@@ -14,7 +14,6 @@ namespace Mono.Math.Prime.Generator
     /// <summary>
     /// Finds the next prime after a given number.
     /// </summary>
-    [CLSCompliant(false)]
     internal class NextPrimeFinder : SequentialSearchPrimeGeneratorBase
     {
         protected override BigInteger GenerateSearchBase(int bits, object Context)

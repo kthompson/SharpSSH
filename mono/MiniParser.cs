@@ -36,7 +36,6 @@ using System.Text;
 
 namespace Mono.Xml
 {
-    [CLSCompliant(false)]
     internal class MiniParser
     {
         private static readonly int INPUT_RANGE = 13;

@@ -11,7 +11,6 @@ using System;
 
 namespace Mono.Math.Prime.Generator
 {
-    [CLSCompliant(false)]
     internal class SequentialSearchPrimeGeneratorBase : PrimeGeneratorBase
     {
         protected virtual BigInteger GenerateSearchBase(int bits, object Context)

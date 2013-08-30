@@ -11,7 +11,6 @@ using System;
 
 namespace Mono.Math.Prime.Generator
 {
-    [CLSCompliant(false)]
     internal abstract class PrimeGeneratorBase
     {
         public virtual ConfidenceFactor Confidence

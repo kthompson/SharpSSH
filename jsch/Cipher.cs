@@ -31,7 +31,7 @@ namespace Tamir.SharpSsh.jsch
 
     public abstract class Cipher
     {
-        internal static int ENCRYPT_MODE;
+        internal const int ENCRYPT_MODE = 0;
         internal static int DECRYPT_MODE = 1;
         public abstract int getIVSize();
         public abstract int getBlockSize();

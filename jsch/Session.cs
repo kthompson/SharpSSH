@@ -108,7 +108,7 @@ namespace Tamir.SharpSsh.jsch
         private UserInfo userinfo;
 
         internal String username;
-        internal bool x11_forwarding;
+        internal const bool x11_forwarding = false;
 
         internal Session(JSch jsch)
         {

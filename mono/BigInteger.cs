@@ -17,9 +17,10 @@ using System.Security.Cryptography;
 using Mono.Math.Prime;
 using Mono.Math.Prime.Generator;
 
+#pragma warning disable 252,253
+
 namespace Mono.Math
 {
-    [CLSCompliant(false)]
     internal class BigInteger
     {
         #region Data Storage
