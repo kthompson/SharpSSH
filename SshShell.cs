@@ -190,7 +190,6 @@ namespace Tamir.SharpSsh
         public Stream GetStream()
         {
             return new CombinedStream(m_channel.getInputStream(), m_channel.getOutputStream());
-            ;
         }
 
         public void SetStream(Stream inputStream, Stream outputStream)
