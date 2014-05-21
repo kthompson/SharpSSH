@@ -500,6 +500,7 @@ namespace Tamir.SharpSsh
         /// <param name="server">A connected server I/O stream</param>
         /// <param name="rfile">The remote file to copy</param>
         /// <param name="lfile">The local destination path</param>
+        /// <param name="size">The size.</param>
         protected void SCP_ReceiveFile(Stream server, string rfile, string lfile, int size)
         {
             int copied = 0;
@@ -531,7 +532,7 @@ namespace Tamir.SharpSsh
         /// Instructs the remote server to enter into a directory
         /// </summary>
         /// <param name="server">A connected server I/O stream</param>
-        /// <param name="dir">The directory name/param>
+        /// <param name="dir">The directory name</param>
         protected void SCP_EnterIntoDir(Stream server, string dir)
         {
             try

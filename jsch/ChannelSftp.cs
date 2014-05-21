@@ -2424,7 +2424,6 @@ namespace Tamir.SharpSsh.jsch
                 length -= 4;
                 int count = buf.getInt();
 
-                byte[] str;
                 //int flags; unused
 
                 buf.reset();
@@ -2442,7 +2441,7 @@ namespace Tamir.SharpSsh.jsch
 
                     byte[] filename = buf.getString();
                     //System.err.println("filename: "+new String(filename));
-                    str = buf.getString();
+                    buf.getString();
                     SftpATTRS attrs = SftpATTRS.getATTR(buf);
 
                     if (Util.glob(pattern, filename))

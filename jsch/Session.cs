@@ -1730,15 +1730,12 @@ namespace Tamir.SharpSsh.jsch
                 foo = config.get(name);
                 if (foo != null)
                 {
-                    if (foo is String) return (String) foo;
                     if (foo is string) return (string) foo;
                 }
             }
 
             foo = jsch.getConfig(name.ToString());
-            if (foo is string) return (string) foo;
-            if (foo is String) return (String) foo;
-            return null;
+            return (string) foo;
         }
 
         //  public Channel getChannel(){ return channel; }
