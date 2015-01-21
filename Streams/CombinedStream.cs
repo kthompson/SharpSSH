@@ -89,6 +89,15 @@ namespace Tamir.Streams
         }
 
         /// <summary>
+        /// Gets or sets a value, in miliseconds, that determines how long the stream will attempt to read before timing out.
+        /// </summary>
+        public override int ReadTimeout
+        {
+            get { return m_in.ReadTimeout; }
+            set { m_in.ReadTimeout = value; }
+        }
+
+        /// <summary>
         /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
         /// </summary>
         /// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count- 1) replaced by the bytes read from the current source.</param>

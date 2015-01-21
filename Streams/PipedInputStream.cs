@@ -292,6 +292,11 @@ namespace Tamir.Streams
             Monitor.PulseAll(this);
         }
 
+        /// <summary>
+        /// Gets or sets a value, in miliseconds, that determines how long the stream will attempt to read before timing out.
+        /// </summary>
+        public override int ReadTimeout { get; set; }
+
         /**
 		 * Reads the next byte of data from this piped input stream. The
 		 * value byte is returned as an <code>int</code> in the range
@@ -329,6 +334,8 @@ namespace Tamir.Streams
 
             readSide = Thread.CurrentThread;
             int trials = 2;
+            var timeout = this.ReadTimeout;
+            var doTimeout = timeout > 0;
             while (m_in < 0)
             {
                 if (closedByWriter)
@@ -344,7 +351,18 @@ namespace Tamir.Streams
                 Monitor.PulseAll(this);
                 try
                 {
-                    Monitor.Wait(this, 1000);
+                    if (!Monitor.Wait(this, 1000) && doTimeout)
+                    {
+                        timeout -= 1000;
+                        if (timeout <= 0)
+                        {
+                            throw new TimeoutException(string.Format("waited {0} miliseconds", ReadTimeout));
+                        }
+                    }
+                    else
+                    {
+                        timeout = this.ReadTimeout;
+                    }
                 }
                 catch (ThreadInterruptedException ex)
                 {
