@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch
@@ -46,9 +47,9 @@ namespace Tamir.SharpSsh.jsch
         {
             //System.out.println(this+":run >");
             /*
-				if(thread!=null){ return; }
-				thread=Thread.currentThread();
-			*/
+                if(thread!=null){ return; }
+                thread=Thread.currentThread();
+            */
 
             //    Buffer buf=new Buffer();
             var buf = new Buffer(rmpsize);
@@ -62,9 +63,9 @@ namespace Tamir.SharpSsh.jsch
                        io.ins != null)
                 {
                     i = io.ins.Read(buf.buffer,
-                                    14,
-                                    buf.buffer.Length - 14
-                                    - 32 - 20 // padding and mac
+                        14,
+                        buf.buffer.Length - 14
+                        - 32 - 20 // padding and mac
                         );
                     if (i == 0) continue;
                     if (i == -1)
@@ -83,8 +84,8 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine("# ChannelSession.run");
-                Console.WriteLine(e);
+                Trace.WriteLine("# ChannelSession.run");
+                Trace.WriteLine(e);
             }
             if (thread != null)
             {

@@ -1,6 +1,7 @@
 //using System;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -1052,7 +1053,7 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Trace.WriteLine(e);
             }
             return null;
         }
