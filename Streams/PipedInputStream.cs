@@ -351,9 +351,9 @@ namespace Tamir.Streams
                 Monitor.PulseAll(this);
                 try
                 {
-                    if (!Monitor.Wait(this, 1000) && doTimeout)
+                    if (!Monitor.Wait(this, 100) && doTimeout)
                     {
-                        timeout -= 1000;
+                        timeout -= 100;
                         if (timeout <= 0)
                         {
                             throw new TimeoutException(string.Format("waited {0} miliseconds", ReadTimeout));
