@@ -1485,23 +1485,12 @@ namespace Tamir.SharpSsh.jsch
             _write(packet);
         }
 
-        /*
-		public lockpublic void write(Packet packet) {
-		   encode(packet);
-		   if(io!=null){
-			 io.put(packet);
-			 seqo++;
-		   }
-		}
-		*/
-
         public void write(Packet packet)
         {
-            // System.Console.WriteLine("in_kex="+in_kex+" "+(packet.buffer.buffer[5]));
             while (in_kex)
             {
                 byte command = packet.buffer.buffer[5];
-                //System.Console.WriteLine("command: "+command);
+
                 if (command == SSH_MSG_KEXINIT ||
                     command == SSH_MSG_NEWKEYS ||
                     command == SSH_MSG_KEXDH_INIT ||
@@ -1547,19 +1536,6 @@ namespace Tamir.SharpSsh.jsch
         public void disconnect()
         {
             if (!_isConnected) return;
-
-            //System.Console.WriteLine(this+": disconnect");
-            //Thread.dumpStack();
-            /*
-			for(int i=0; i<Channel.pool.size(); i++){
-			  try{
-				Channel c=((Channel)(Channel.pool.elementAt(i)));
-			if(c.session==this) c.eof();
-			  }
-			  catch(Exception e){
-			  }
-			}
-			*/
 
             Channel.disconnect(this);
 

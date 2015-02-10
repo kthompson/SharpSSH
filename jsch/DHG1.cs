@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -111,7 +112,7 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception ee)
             {
-                Console.WriteLine(ee);
+                Trace.WriteLine(ee, "SharpSSH");
             }
 
             buf = new Buffer();
@@ -163,7 +164,7 @@ namespace Tamir.SharpSsh.jsch
                     j = _buf.getByte();
                     if (j != 31)
                     {
-                        Console.WriteLine("type: must be 31 " + j);
+                        Trace.WriteLine("type: must be 31 " + j, "SharpSSH");
                         result = false;
                         break;
                     }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Tamir.SharpSsh.java.lang;
 using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.util;
@@ -84,8 +85,8 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine("target={0},port={1}", target, lport);
-                Console.WriteLine(e);
+                Trace.Write(string.Format("target={0},port={1}", target, lport), "SharpSSH");
+                Trace.WriteLine(e, "SharpSSH");
             }
         }
 
@@ -170,7 +171,7 @@ namespace Tamir.SharpSsh.jsch
                 }
                 if (target == null)
                 {
-                    Console.WriteLine("??");
+                    Trace.WriteLine("??", "SharpSSH");
                 }
             }
         }

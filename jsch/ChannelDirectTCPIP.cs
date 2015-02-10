@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using Tamir.SharpSsh.java.lang;
 
@@ -59,7 +60,7 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Trace.WriteLine(e, "SharpSSH");
             }
         }
 

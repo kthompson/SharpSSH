@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Tamir.SharpSsh.java.lang;
@@ -82,7 +83,7 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Trace.WriteLine(e, "SharpSSH");
             }
         }
 
@@ -217,7 +218,7 @@ namespace Tamir.SharpSsh.jsch
                 }
                 else
                 {
-                    Console.WriteLine("wrong cookie");
+                    Trace.WriteLine("wrong cookie", "SharpSSH");
                 }
                 _init = false;
             }
@@ -260,7 +261,7 @@ namespace Tamir.SharpSsh.jsch
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                Trace.WriteLine(e.StackTrace, "SharpSSH");
             }
             io = null;
             del(this);
