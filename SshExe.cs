@@ -87,7 +87,7 @@ namespace Tamir.SharpSsh
             {
                 c = s.Read(buff, 0, buff.Length);
                 if (c == -1) break;
-                res.Append(Encoding.ASCII.GetString(buff, 0, c));
+                res.Append(Encoding.UTF8.GetString(buff, 0, c));
                 //Diagnostics.Debug.WriteLine(res);
             }
             m_channel.disconnect();
@@ -110,9 +110,9 @@ namespace Tamir.SharpSsh
             while (true)
             {
                 if (o != -1) o = stdout.Read(buff, 0, buff.Length);
-                if (o != -1) StdOut += sbStdOut.Append(Encoding.ASCII.GetString(buff, 0, o));
+                if (o != -1) StdOut += sbStdOut.Append(Encoding.UTF8.GetString(buff, 0, o));
                 if (e != -1) e = stderr.Read(buff, 0, buff.Length);
-                if (e != -1) StdErr += sbStdErr.Append(Encoding.ASCII.GetString(buff, 0, e));
+                if (e != -1) StdErr += sbStdErr.Append(Encoding.UTF8.GetString(buff, 0, e));
                 if ((o == -1) && (e == -1)) break;
             }
             m_channel.disconnect();
